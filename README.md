@@ -12,7 +12,7 @@ Website giới thiệu, kiểm tra lịch trống hỗ trợ đặt phòng cho T
 - **Frontend:** HTML5, CSS3, JavaScript.
 - **Icons:** FontAwesome 6.
 - **Deployment:** Vercel.
-  ## 📁 Cấu trúc thư mục
+## 📁 Cấu trúc thư mục
 ├── index.html        # Trang chủ đặt phòng
 ├── admin.html        # Trang quản lý dành cho Admin
 ├── style.css         # File định dạng giao diện chung
