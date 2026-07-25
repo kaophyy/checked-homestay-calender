@@ -1,0 +1,497 @@
+/* CSS RESET & BASE STYLES */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #8c9890; /* Dark grey-green background like screenshot */
+    color: #333;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* HERO SECTION */
+.hero {
+    position: relative;
+    background: url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+    height: 380px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+}
+
+.logo-icon {
+    font-size: 40px;
+    margin-bottom: 5px;
+    color: #fff;
+}
+
+.hero h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+}
+
+.hero .subtitle {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-bottom: 15px;
+    background: rgba(0, 0, 0, 0.3);
+    display: inline-block;
+    padding: 5px 15px;
+    border-radius: 4px;
+}
+
+.hero-icons {
+    font-size: 18px;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+/* FEATURES SECTION */
+.features {
+    display: flex;
+    gap: 20px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    justify-content: center;
+}
+
+.feature-card {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    flex: 1;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    text-align: center;
+}
+
+.feature-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.feature-card h3 {
+    font-size: 1rem;
+    padding: 15px 10px;
+    font-weight: 700;
+    color: #222;
+}
+
+.feature-card.center-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.center-card .card-text {
+    padding: 10px 15px 15px;
+    font-size: 0.85rem;
+    color: #555;
+    text-align: left;
+    line-height: 1.4;
+}
+
+.center-card h3 {
+    padding: 5px 0 5px 0;
+}
+
+/* BOOKING & CALENDAR SECTION */
+.booking-section {
+    background-color: #8c9890;
+    padding-bottom: 50px;
+}
+
+.section-title-banner {
+    background-color: #e2f0e5; /* Soft light green */
+    text-align: center;
+    padding: 15px 0;
+    margin-bottom: 25px;
+}
+
+.section-title-banner h2 {
+    color: #111;
+    font-size: 1.3rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+.booking-container {
+    display: flex;
+    gap: 25px;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+/* LEGEND BOX */
+.legend-box {
+    background: #fff;
+    border-radius: 10px;
+    padding: 25px 20px;
+    width: 280px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.legend-box h3 {
+    font-size: 1rem;
+    margin-bottom: 20px;
+    color: #333;
+    font-weight: 700;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.dot {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.dot.green { background-color: #2ecc71; }
+.dot.orange { background-color: #f39c12; }
+.dot.red { background-color: #e74c3c; }
+
+/* CALENDAR BOX */
+.calendar-box {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px 25px;
+    width: 480px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.calendar-header h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.nav-btn {
+    border: none;
+    background: transparent;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: #666;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.day-header {
+    font-size: 0.75rem;
+    color: #888;
+    padding-bottom: 8px;
+}
+
+.day-cell {
+    padding: 8px 2px;
+    font-size: 0.85rem;
+    border-radius: 4px;
+    min-height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    cursor: pointer;
+}
+
+.day-cell.other-month {
+    color: #ccc;
+}
+
+.day-cell.booked.red {
+    background-color: #d9534f;
+    color: #fff;
+    font-size: 0.75rem;
+}
+
+.day-cell.pending.orange {
+    background-color: #f0ad4e;
+    color: #fff;
+}
+
+.day-cell.available.blue {
+    background-color: #d9edf7;
+    color: #31708f;
+}
+
+.day-cell.active-today {
+    border: 2px solid #337ab7;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    margin: 0 auto;
+}
+
+.day-cell.selected-day {
+    border: 2px solid #337ab7;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    margin: 0 auto;
+}
+
+/* Highlight phủ kín toàn bộ ô khi khách click chọn ngày */
+.calendar-grid .day-cell.selected-day {
+    background-color: #f39c12 !important; /* Màu nền cam nổi bật phủ kín ô */
+    color: #ffffff !important;            /* Chữ đổi sang màu trắng cho dễ nhìn */
+    font-weight: bold !important;          /* In đậm số ngày */
+    border-radius: 6px !important;         /* Bo nhẹ 4 góc cho đẹp mắt */
+    box-shadow: 0 0 10px rgba(243, 156, 18, 0.6); /* Đổ bóng nhẹ tạo hiệu ứng viền phát sáng */
+    transition: all 0.2s ease-in-out;
+}
+
+/* Đảm bảo ô ngày có vị trí tương đối để hiệu ứng hiển thị chuẩn */
+.calendar-grid .day-cell {
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+}
+
+/* NOTICE BOX */
+.notice-box {
+    background-color: #ffcc00;
+    color: #222;
+    padding: 12px 15px;
+    border-radius: 6px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 0.8rem;
+    line-height: 1.3;
+    margin-bottom: 18px;
+}
+
+.notice-box i {
+    font-size: 1.2rem;
+    margin-top: 2px;
+}
+
+/* ZALO BUTTON */
+.zalo-btn {
+    width: 100%;
+    background-color: #1b74e4;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: background 0.2s;
+}
+
+.zalo-btn:hover {
+    background-color: #155cb4;
+}
+
+/* QR MODAL PREVIEW (as shown floating in screenshot) */
+.qr-modal-preview {
+    position: fixed;
+    bottom: 50px;
+    left: 40px;
+    z-index: 100;
+}
+
+.qr-card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    width: 220px;
+    position: relative;
+}
+
+.qr-card .close-btn {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: #666;
+}
+
+.qr-card h4 {
+    font-size: 0.85rem;
+    margin-bottom: 12px;
+    line-height: 1.2;
+    color: #222;
+}
+
+.qr-image img {
+    width: 130px;
+    height: 130px;
+    margin-bottom: 10px;
+}
+
+.qr-sub {
+    font-size: 0.7rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.hotline {
+    font-size: 0.7rem;
+    color: #555;
+    margin-top: 3px;
+}
+
+/* FLOATING MESSENGER WIDGET */
+.floating-widget {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #0084ff;
+    color: white;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    cursor: pointer;
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 768px) {
+    .features {
+        flex-direction: column;
+    }
+    
+    .booking-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .calendar-box, .legend-box {
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .qr-modal-preview {
+        position: relative;
+        bottom: auto;
+        left: auto;
+        margin: 20px auto;
+        display: flex;
+        justify-content: center;
+    }
+}
+/* Mặc định ẩn popup QR */
+.qr-modal-preview {
+    display: none; /* Ẩn mặc định */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6); /* Lớp nền tối mờ toàn màn hình */
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Khi có class "active" sẽ bật ra giữa màn hình */
+.qr-modal-preview.active {
+    display: flex !important;
+}
+
+/* Thẻ card chứa hình QR */
+.qr-card {
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 16px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    max-width: 320px;
+    width: 90%;
+}
+
+/* Khóa không cho nhấp chuột vào ngày đã cọc hoặc chờ cọc */
+.day-cell.booked, 
+.day-cell.pending {
+    cursor: not-allowed !important; /* Hiện biểu tượng cấm chọn */
+    opacity: 0.8;
+}
+
+/* Đảm bảo ngày chọn đè lên chuẩn màu xanh dương nổi bật */
+.day-cell.selected-day {
+    background-color: #2563eb !important;
+    color: #ffffff !important;
+    border-radius: 6px;
+}
+
+/* Tối ưu hóa giao diện cho màn hình điện thoại nhỏ */
+@media screen and (max-width: 600px) {
+    body {
+        padding: 10px; /* Giảm khoảng cách lề cho màn hình nhỏ */
+    }
+
+    .admin-card, .calendar-container {
+        width: 100% !important;
+        padding: 15px !important;
+    }
+
+    /* Thu nhỏ kích thước ô lịch trên điện thoại để không bị tràn */
+    .calendar-grid .day-cell {
+        min-height: 38px;
+        font-size: 14px;
+    }
+
+    /* Đảm bảo các nút bấm full chiều ngang dễ thao tác */
+    .action-btns {
+        flex-direction: column;
+        gap: 8px;
+    }
+}
