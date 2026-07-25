@@ -4,62 +4,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Homestay Xanh - Nơi Trốn Tuyệt Vời</title>
+    <title>Tuni's House - Nơi Trốn Tuyệt Vời</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
-
+    <div class="top-bar-notice">
+        <span>🚀 Website đang trong giai đoạn chạy thử nghiệm. Mọi đóng góp xin liên hệ Zalo: 0981.081.915 hoặc
+            070.443.3805. Chân thành cảm
+            ơn quý khách!</span>
+    </div>
     <!-- Hero Section -->
-    <header class="hero">
+    <header id="about" class="hero">
         <div class="hero-overlay"></div>
         <div class="hero-content">
             <div class="logo-icon">
                 <i class="fa-solid fa-house-chimney-window"></i>
             </div>
-            <h1>Homestay Xanh</h1>
-            <p class="subtitle">Nơi Trốn Tuyệt Vời Cho Gia Đình & Nhóm Bạn (8-15 Người)</p>
-            <div class="hero-icons">
-                <i class="fa-solid fa-users"></i>
-                <i class="fa-solid fa-tree"></i>
-            </div>
+            <h1>Tuni's House</h1>
+            <p class="subtitle">Đến Lagi - Chọn Tuni</p>
         </div>
     </header>
 
     <!-- Features Section -->
-    <section class="features container">
-        <div class="feature-card">
+    <section id="amenities" class="features container">
+        <div class="feature-card card">
             <div class="card-img">
-                <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=600&q=80"
-                    alt="Tiện nghi & Ấm cúng">
-            </div>
-            <h3>TIỆN NGHI & ẤM CÚNG</h3>
-        </div>
-
-        <div class="feature-card center-card">
-            <div class="card-img">
-                <img src="https://images.unsplash.com/photo-1617806118233-18e1de247200?auto=format&fit=crop&w=600&q=80"
-                    alt="Không gian ăn uống">
+                <img src="images/pn1.jpg" alt="Phòng ngủ lớn">
             </div>
             <div class="card-text">
-                <h3>TIỆN NGHI & ẤM CÚNG</h3>
-                <p>Gần gũi thiên nhiên/ấm cúng, thiên nhiên hòa cùng căn bếp rộng, đầy đủ tiện nghi, mang lại trải
-                    nghiệm ấm cúng, thư thái đong đầy tình cảm...</p>
+                <h3>PHÒNG NGỦ LỚN</h3>
+                <p>Trang bị sẵn 2 nệm êm ái, rộng rãi, thoải mái cho nhóm hoặc gia đình nhỏ 4 người nghỉ ngơi.</p>
+            </div>
+
+        </div>
+
+        <div class="feature-card card">
+            <div class="card-img">
+                <img src="images/pn2.jpg" alt="Phòng ngủ bé">
+            </div>
+            <div class="card-text">
+                <h3>PHÒNG NGỦ BÉ</h3>
+                <p>Không gian ấm cúng, riêng tư và yên tĩnh, chuẩn bị sẵn sàng cho 2 khách giấc ngủ trọn vẹn.</p>
             </div>
         </div>
 
-        <div class="feature-card">
+        <div class="feature-card card">
             <div class="card-img">
-                <img src="https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=600&q=80"
-                    alt="Gần gũi thiên nhiên">
+                <img src="images/phong-khach.jpg" alt="Phòng khách & Bếp">
             </div>
-            <h3>GẦN GẦN GỦI THIÊN NHIÊN</h3>
+            <div class="card-text">
+                <h3>PHÒNG KHÁCH & BẾP THÔNG MINH</h3>
+                <p>Không gian ấm cúng, riêng tư và yên tĩnh, chuẩn bị sẵn sàng cho 2 khách giấc ngủ trọn vẹn.</p>
+            </div>
+        </div>
+
+        <div class="feature-card card">
+            <div class="card-img">
+                <img src="images/san-vuon.jpg" alt="Sân vườn">
+            </div>
+            <div class="card-text">
+                <h3>SÂN NHỎ XIN XẮN</h3>
+                <p>Khoảng sân trước nhà thoáng mát, góc lý tưởng để hóng gió, nhâm nhi ly trà và check-in sống ảo.</p>
+            </div>
         </div>
     </section>
 
     <!-- Booking / Calendar Section -->
-    <section class="booking-section">
+    <section id="calendar-section" class="booking-section">
         <div class="section-title-banner">
             <h2>CHECK LỊCH CÒN TRỐNG & ĐẶT PHÒNG</h2>
         </div>
@@ -164,8 +177,7 @@
             <button class="close-btn" id="close-qr">&times;</button>
             <h4>QUÉT QR ZALO<br>ĐỂ ĐẶT PHÒNG</h4>
             <div class="qr-image">
-                <img src="images/qr.png"
-                    alt="QR Zalo">
+                <img src="images/qr-code.png" alt="QR Zalo">
             </div>
             <p class="qr-sub">QUÉT QR ZALO ĐỂ ĐẶT PHÒNG</p>
             <p class="hotline">Hotline/Zalo: 0981.081.915 - Mr. Cao Phi</p>
@@ -174,15 +186,66 @@
 
     <!-- Floating Chat Widget -->
     <div class="floating-widget" id="messenger-widget">
-        <i class="fa-brands fa-facebook-messenger"></i>
+        <a href="https://tunihousehomestaylagi" style="color: inherit">
+            <i class="fa-brands fa-facebook-messenger"></i>
+        </a>
     </div>
 
     <!-- Nạp Firebase SDK từ CDN -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-    
+
     <!-- File Script chính của dự án -->
     <script src="script.js"></script>
 </body>
+<!-- ================= FOOTER ================= -->
+<footer class="site-footer">
+    <div class="footer-container">
+        <!-- Cột 1: Giới thiệu ngắn -->
+        <div class="footer-col">
+            <h3><i class="fa-solid fa-house-chimney"></i> Tuni's House</h3>
+            <p>Tuni biết bạn có nhiều lựa sự lựa chọn.
+                Cảm ơn bạn đã cho Tuni được đồng hành cùng bạn.</p>
+            <div class="footer-socials">
+                <a href="https://facebook.com" target="_blank" title="Facebook"><i
+                        class="fa-brands fa-facebook-f"></i></a>
+                <a href="https://zalo.me/0981081915" target="_blank" title="Zalo"><i
+                        class="fa-solid fa-comment-sms"></i></a>
+                <a href="tel:0981081915" title Hotline><i class="fa-solid fa-phone"></i></a>
+            </div>
+        </div>
+
+        <!-- Cột 2: Liên kết nhanh -->
+        <div class="footer-col">
+            <h4>Khám Phá</h4>
+            <ul>
+                <li><a href="#about"><i class="fa-solid fa-angle-right"></i> Về chúng tôi</a></li>
+                <li><a href="#amenities"><i class="fa-solid fa-angle-right"></i> Tiện nghi & Dịch vụ</a></li>
+                <li><a href="#calendar-section"><i class="fa-solid fa-angle-right"></i> Đặt lịch phòng</a></li>
+                <li><a href="admin.html"><i class="fa-solid fa-angle-right"></i> Trang Quản Lý(Admin)</a></li>
+            </ul>
+        </div>
+
+        <!-- Cột 3: Thông tin liên hệ -->
+        <div class="footer-col">
+            <h4>Liên Hệ</h4>
+            <p><i class="fa-solid fa-location-dot"></i><a href="https://maps.app.goo.gl/G5sUv4R32t4eu8Tp8"
+                    style="color: inherit">Địa chỉ: 56 Phan Văn Trị, Khu phố 6, Lagi, Lâm Đồng</a></p>
+
+            <p><i class="fa-brands fa-facebook"></i><a href="https://www.facebook.com/tunihousehomestaylagi"
+                    style="color: inherit">Facebook: Tuni's House - Homestay Lagi </a></p>
+            <p><i class="fa-brands fa-tiktok"></i><a
+                    href="https://www.tiktok.com/@tunihomestaylagi?is_from_webapp=1&sender_device=pc"
+                    style="color: inherit;">Tiktok: Tuni Homestay Lagi</a></p>
+            <p><i class="fa-solid fa-phone-volume"></i> Hotline / Zalo: 070.443.3805 - Mr. Tuấn</p>
+            <p><i class="fa-solid fa-envelope"></i> Email: tunihomestay@gmail.com</p>
+        </div>
+    </div>
+
+    <!-- Dòng bản quyền phía dưới -->
+    <div class="footer-bottom">
+        <p>Bản quyền thuộc về Tuni's House &copy; 2026</p>
+    </div>
+</footer>
 
 </html>
