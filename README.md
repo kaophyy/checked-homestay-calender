@@ -12,8 +12,11 @@
 - **Frontend:** HTML5, CSS3, JavaScript.
 - **Icons:** FontAwesome 6.
 - **Deployment:** Vercel.
-## 📁 Cấu trúc thư mục
-├── index.html        # Trang chủ đặt phòng
-├── admin.html        # Trang quản lý dành cho Admin
-├── style.css         # File định dạng giao diện chung
-└── images/           # Thư mục chứa hình ảnh homestay
+## 📂 Cấu trúc thư mục
+
+```text
+├── index.html       # Trang chủ đặt phòng dành cho khách
+├── admin.html       # Trang quản lý lịch dành cho Admin
+├── style.css        # File định dạng giao diện chung
+├── script.js        # Xử lý logic lịch & modal pop-up
+└── images/          # Thư mục chứa hình ảnh homestay
