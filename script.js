@@ -248,7 +248,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (messengerWidget) {
         messengerWidget.addEventListener('click', function () {
-            window.open('https://zalo.me/0901234567', '_blank');
+            window.open('https://zalo.me/0981081915', '_blank');
         });
     }
 

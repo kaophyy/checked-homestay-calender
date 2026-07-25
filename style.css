@@ -495,3 +495,13 @@ body {
         gap: 8px;
     }
 }
+
+/* Đảm bảo trạng thái ẩn mặc định cho Modal QR */
+.qr-modal-preview {
+    display: none; 
+}
+
+/* Khi Javascript thêm class active thì hiển thị dạng Flex căn giữa */
+.qr-modal-preview.active {
+    display: flex !important;
+}
