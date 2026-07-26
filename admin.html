@@ -195,7 +195,6 @@
             display: flex;
             align-items: center;
             gap: 6px;
-
         }
 
         .customer-phone {
@@ -420,7 +419,11 @@
                     <i class="fa-solid fa-calendar-plus" style="color: #2563eb;"></i> Khóa Phòng Thủ Công
                 </div>
                 <div style="margin-bottom: 8px;">
-                    <input type="text" id="manual-name" placeholder="Tên khách đặt (VD: Anh Minh)"
+                    <input type="text" id="manual-name" placeholder="Tên khách đặt"
+                        style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc; font-size: 13px;">
+                </div>
+                <div style="margin-bottom: 8px;">
+                    <input type="text" id="manual-phone" placeholder="Số điện thoại"
                         style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc; font-size: 13px;">
                 </div>
                 <div style="display: flex; gap: 8px; margin-bottom: 8px;">
@@ -589,12 +592,11 @@
                         }
 
                         const diffTime = Math.abs(e - s);
-                        totalNights = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) || 1;
+                        totalNights = Math.round(diffTime / (1000 * 60 * 60 * 24)) || 1;
                     }
 
                     // Luôn hiển thị đầy đủ dải ngày: [Ngày nhận] ➔ [Ngày trả]
                     const rangeDisplay = `${formatDate(startDateStr)} ➔ ${formatDate(endDateStr)}`;
-                    // ------------------------------------------------
 
                     // Thông tin khách hàng
                     const customerName = data.customer_name ? data.customer_name : 'Khách không nhập tên';
@@ -616,47 +618,47 @@
 
                         // Nút gia hạn thời gian
                         extendHtml = `
-                <div class="extend-btns">
-                    <span class="extend-label"><i class="fa-solid fa-hourglass-plus"></i> Gia hạn:</span>
-                    <button class="btn-extend" onclick="extendPendingTime('${bookingId}', 30)">+30 phút</button>
-                    <button class="btn-extend" onclick="extendPendingTime('${bookingId}', 60)">+60 phút</button>
-                </div>
-                `;
+                        <div class="extend-btns">
+                            <span class="extend-label"><i class="fa-solid fa-hourglass-plus"></i> Gia hạn:</span>
+                            <button class="btn-extend" onclick="extendPendingTime('${bookingId}', 30)">+30 phút</button>
+                            <button class="btn-extend" onclick="extendPendingTime('${bookingId}', 60)">+60 phút</button>
+                        </div>
+                        `;
                     }
 
                     const item = document.createElement('div');
                     item.className = 'booking-card';
                     item.innerHTML = `
-            <div class="customer-detail">
-                <div class="customer-name"><i class="fa-solid fa-user"></i> ${customerName}</div>
-                ${data.customer_phone ? `
-                    <div class="customer-phone">
-                        <i class="fa-solid fa-phone"></i> 
-                        <a href="tel:${customerPhone}">${customerPhone}</a> 
-                        | <a href="https://zalo.me/${customerPhone}" target="_blank" style="color:#0068ff;"><i class="fa-solid fa-comment"></i> Zalo</a>
+                    <div class="customer-detail">
+                        <div class="customer-name"><i class="fa-solid fa-user"></i> ${customerName}</div>
+                        ${data.customer_phone ? `
+                            <div class="customer-phone">
+                                <i class="fa-solid fa-phone"></i> 
+                                <a href="tel:${customerPhone}">${customerPhone}</a> 
+                                | <a href="https://zalo.me/${customerPhone}" target="_blank" style="color:#0068ff;"><i class="fa-solid fa-comment"></i> Zalo</a>
+                            </div>
+                        ` : '<div class="customer-phone" style="color:#94a3b8;"><i class="fa-solid fa-phone"></i> Không có SĐT</div>'}
                     </div>
-                ` : '<div class="customer-phone" style="color:#94a3b8;"><i class="fa-solid fa-phone"></i> Không có SĐT</div>'}
-            </div>
 
-            <div class="booking-info">
-                <div class="booking-date">
-                    <i class="fa-regular fa-calendar-days"></i> ${rangeDisplay}
-                    <span class="booking-days">(${totalNights} đêm)</span>
-                </div>
-                <div>
-                    <span class="badge-status ${isPending ? 'badge-pending' : 'badge-booked'}">
-                        ${isPending ? '<i class="fa-solid fa-hourglass-half"></i> Đang chờ cọc' : '<i class="fa-solid fa-circle-check"></i> Đã chốt cọc'}
-                    </span>
-                </div>
-                ${expireText}
-                ${extendHtml}
-            </div>
+                    <div class="booking-info">
+                        <div class="booking-date">
+                            <i class="fa-regular fa-calendar-days"></i> ${rangeDisplay}
+                            <span class="booking-days">(${totalNights} đêm)</span>
+                        </div>
+                        <div>
+                            <span class="badge-status ${isPending ? 'badge-pending' : 'badge-booked'}">
+                                ${isPending ? '<i class="fa-solid fa-hourglass-half"></i> Đang chờ cọc' : '<i class="fa-solid fa-circle-check"></i> Đã chốt cọc'}
+                            </span>
+                        </div>
+                        ${expireText}
+                        ${extendHtml}
+                    </div>
 
-            <div class="action-btns">
-                ${isPending ? `<button class="btn-approve" onclick="updateBooking(this, '${bookingId}', 'booked')"><i class="fa-solid fa-check"></i> Duyệt Cọc</button>` : ''}
-                <button class="btn-cancel" onclick="updateBooking(this, '${bookingId}', 'available')"><i class="fa-solid fa-xmark"></i> Hủy Lịch</button>
-            </div>
-            `;
+                    <div class="action-btns">
+                        ${isPending ? `<button class="btn-approve" onclick="updateBooking(this, '${bookingId}', 'booked')"><i class="fa-solid fa-check"></i> Duyệt Cọc</button>` : ''}
+                        <button class="btn-cancel" onclick="updateBooking(this, '${bookingId}', 'available')"><i class="fa-solid fa-xmark"></i> Hủy Lịch</button>
+                    </div>
+                    `;
                     bookingList.appendChild(item);
                 }
             });
@@ -665,6 +667,7 @@
                 bookingList.innerHTML = `<div class="empty-msg"><i class="fa-regular fa-folder-open"></i><br>Không có đơn đặt phòng nào!</div>`;
             }
         }
+
         function formatDate(str) {
             if (!str) return '';
             const p = str.split('-');
@@ -760,6 +763,7 @@
         // TẠO ĐƠN THỦ CÔNG
         window.createManualBooking = async function () {
             const name = document.getElementById('manual-name').value.trim() || 'Khách khóa ngoài';
+            const phone = document.getElementById('manual-phone').value.trim() || 'Số điện thoại khách khóa ngoài';
             const start = document.getElementById('manual-start').value;
             const end = document.getElementById('manual-end').value;
 
@@ -791,7 +795,7 @@
 
                 batch.set(db.collection("bookings").doc(bookingId), {
                     customer_name: name,
-                    customer_phone: "Khóa thủ công",
+                    customer_phone: phone,
                     start_date: start,
                     end_date: end,
                     dates: dates,
@@ -802,13 +806,15 @@
                 dates.forEach(d => {
                     batch.set(db.collection("calendar").doc(d), {
                         status: 'booked',
-                        customer_name: name
+                        customer_name: name,
+                        customer_phone: phone
                     }, { merge: true });
                 });
 
                 await batch.commit();
                 alert("✅ Đã khóa lịch thành công cho khách!");
                 document.getElementById('manual-name').value = '';
+                document.getElementById('manual-phone').value = '';
                 document.getElementById('manual-start').value = '';
                 document.getElementById('manual-end').value = '';
             } catch (e) {
