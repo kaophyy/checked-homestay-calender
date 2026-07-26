@@ -396,7 +396,7 @@
 
             <div id="login-error" class="error-msg"></div>
 
-            <form id="login-form" onsubmit="return false;">
+            <form id="login-form">
                 <div class="form-group">
                     <label>Email Tài Khoản</label>
                     <input type="email" id="admin-email" placeholder="admin@homestay.com" required>
@@ -579,8 +579,9 @@
                     let endDateStr = data.end_date;
 
                     if (startDateStr && endDateStr) {
-                        const s = new Date(startDateStr);
-                        let e = new Date(endDateStr);
+                        // Sửa lỗi Parse UTC Date bằng cách bù thêm múi giờ T00:00:00
+                        const s = new Date(startDateStr + 'T00:00:00');
+                        let e = new Date(endDateStr + 'T00:00:00');
 
                         // Nếu khách chọn ngày nhận trùng ngày trả (1 đêm), tự động cộng 1 ngày cho ngày trả
                         if (startDateStr === endDateStr) {
@@ -595,7 +596,6 @@
                         totalNights = Math.round(diffTime / (1000 * 60 * 60 * 24)) || 1;
                     }
 
-                    // Luôn hiển thị đầy đủ dải ngày: [Ngày nhận] ➔ [Ngày trả]
                     const rangeDisplay = `${formatDate(startDateStr)} ➔ ${formatDate(endDateStr)}`;
 
                     // Thông tin khách hàng
@@ -613,7 +613,7 @@
                         if (diffMins > 0) {
                             expireText = `<div class="expire-time"><i class="fa-regular fa-clock"></i> Thời gian giữ chỗ còn: <strong>${diffMins} phút</strong></div>`;
                         } else {
-                            expireText = `<div class="expire-time" style="color: red;"><i class="fa-solid fa-triangle-exclamation"></i> Đã quá hạn 60p</div>`;
+                            expireText = `<div class="expire-time" style="color: red;"><i class="fa-solid fa-triangle-exclamation"></i> Đã quá hạn giữ chỗ</div>`;
                         }
 
                         // Nút gia hạn thời gian
@@ -772,15 +772,19 @@
                 return;
             }
 
-            if (new Date(end) < new Date(start)) {
+            // Tạo đối tượng Date an toàn
+            const startDateObj = new Date(start + 'T00:00:00');
+            const endDateObj = new Date(end + 'T00:00:00');
+
+            if (endDateObj < startDateObj) {
                 alert("Ngày kết thúc phải lớn hơn hoặc bằng ngày bắt đầu!");
                 return;
             }
 
             let dates = [];
-            let curr = new Date(start);
-            const endDateObj = new Date(end);
+            let curr = new Date(startDateObj);
 
+            // Duyệt từng ngày
             while (curr <= endDateObj) {
                 const yyyy = curr.getFullYear();
                 const mm = String(curr.getMonth() + 1).padStart(2, '0');
@@ -791,7 +795,8 @@
 
             try {
                 const batch = db.batch();
-                const bookingId = `${start}_to_${end}_manual`;
+                // Dùng timestamp ngẫu nhiên để tránh đè trùng id nếu tạo trùng ngày
+                const bookingId = `${start}_to_${end}_manual_${Date.now()}`;
 
                 batch.set(db.collection("bookings").doc(bookingId), {
                     customer_name: name,
@@ -835,8 +840,6 @@
 
                 if (snapshot.empty) {
                     alert("Không tìm thấy đơn rác nào cần xóa!");
-                    btn.disabled = false;
-                    btn.innerHTML = originalText;
                     return;
                 }
 

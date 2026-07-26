@@ -13,9 +13,9 @@
 <body>
     <div class="top-bar-notice">
         <span>🚀 Website đang trong giai đoạn chạy thử nghiệm. Mọi đóng góp xin liên hệ Zalo: 0981.081.915 hoặc
-            070.443.3805. Chân thành cảm
-            ơn quý khách!</span>
+            070.443.3805. Chân thành cảm ơn quý khách!</span>
     </div>
+
     <!-- Hero Section -->
     <header id="about" class="hero">
         <div class="hero-overlay"></div>
@@ -36,9 +36,7 @@
             </div>
             <div class="card-text">
                 <h3>PHÒNG NGỦ LỚN</h3>
-                <p>Trang bị sẵn 2 nệm êm ái, rộng rãi, thoải mái cho nhóm hoặc gia đình nhỏ 4 người nghỉ ngơi.</p>
             </div>
-
         </div>
 
         <div class="feature-card card">
@@ -47,17 +45,15 @@
             </div>
             <div class="card-text">
                 <h3>PHÒNG NGỦ BÉ</h3>
-                <p>Không gian ấm cúng, riêng tư và yên tĩnh, chuẩn bị sẵn sàng cho 2 khách giấc ngủ trọn vẹn.</p>
             </div>
         </div>
 
         <div class="feature-card card">
             <div class="card-img">
-                <img src="images/phong-khach.jpg" alt="Phòng khách & Bếp">
+                <img src="images/bep&phong-khach.jpg" alt="Phòng khách & Bếp">
             </div>
             <div class="card-text">
-                <h3>PHÒNG KHÁCH & BẾP THÔNG MINH</h3>
-                <p>Không gian ấm cúng, riêng tư và yên tĩnh, chuẩn bị sẵn sàng cho 2 khách giấc ngủ trọn vẹn.</p>
+                <h3>PHÒNG KHÁCH & BẾP</h3>
             </div>
         </div>
 
@@ -66,8 +62,7 @@
                 <img src="images/san-vuon.jpg" alt="Sân vườn">
             </div>
             <div class="card-text">
-                <h3>SÂN NHỎ XIN XẮN</h3>
-                <p>Khoảng sân trước nhà thoáng mát, góc lý tưởng để hóng gió, nhâm nhi ly trà và check-in sống ảo.</p>
+                <h3>SÂN VƯỜN</h3>
             </div>
         </div>
     </section>
@@ -81,7 +76,7 @@
         <div class="booking-container container">
             <!-- Legend Box -->
             <div class="legend-box">
-                <h3>LEGEND</h3>
+                <h3>Trạng thái phòng</h3>
                 <div class="legend-item" data-filter="green">
                     <span class="dot green"></span>
                     <span>CÒN TRỐNG</span>
@@ -121,7 +116,7 @@
                     <div class="day-cell other-month">30</div>
                     <div class="day-cell other-month">31</div>
 
-                    <!-- Lịch Tháng 8/2026 đã gắn data-date để đồng bộ Firebase -->
+                    <!-- Lịch Tháng 8/2026 -->
                     <div class="day-cell" data-date="2026-08-01">1</div>
                     <div class="day-cell" data-date="2026-08-02">2</div>
                     <div class="day-cell" data-date="2026-08-03">3</div>
@@ -175,7 +170,7 @@
                         </div>
                     </div>
 
-                    <!-- TRẠNG THÁI 2: ĐÃ CHỌN NGÀY (Nối JS vào đây) -->
+                    <!-- TRẠNG THÁI 2: ĐÃ CHỌN NGÀY -->
                     <div id="notice-selected" class="notice-card notice-success" style="display: none;">
                         <div class="selected-row">
                             <i class="fa-solid fa-calendar-check icon-main"></i>
@@ -192,7 +187,6 @@
                             <i class="fa-solid fa-clock"></i> Check-in: 14:00 | Check-out: 12:00
                         </div>
 
-                        <!-- THÊM DÒNG NÀY ĐỂ HIỂN THỊ CẢNH BÁO 6git add .0 PHÚT -->
                         <div class="selected-warning">
                             <i class="fa-solid fa-triangle-exclamation"></i>
                             <span><strong>Lưu ý:</strong> Đơn <strong>Chờ xác nhận</strong> sẽ tự động hủy sau 60 phút
@@ -236,14 +230,12 @@
             <hr style="border: 0; border-top: 1px dashed #e2e8f0; margin: 12px 0;">
 
             <!-- KHỐI QUÉT QR ZALO LIÊN HỆ -->
-            <p class="qr-sub" style="font-size: 13px; font-weight: 600; color: #0f172a; margin-bottom: 8px;">Quét QR để
-                liên hệ Zalo trực tiếp với Homestay để hoàn thành thủ tục đặt phòng</p>
+            <p class="qr-sub" style="font-size: 13px; font-weight: 600; color: #0f172a; margin-bottom: 8px;">Quét QR và liên hệ Zalo trực tiếp với Homestay để hoàn thành thủ tục đặt phòng</p>
             <div class="qr-image">
                 <img src="images/qr-code.png" alt="QR Zalo" style="max-width: 180px;">
             </div>
 
-            <p class="hotline" style="margin-top: 10px; font-size: 12px; color: #64748b;">Hotline/Zalo: 0981.081.915 -
-                Mr. Cao Phi</p>
+            <p class="hotline" style="margin-top: 10px; font-size: 12px; color: #64748b;">070.443.3805 - Mr. Tuấn</p>
         </div>
     </div>
 
@@ -253,63 +245,86 @@
             <i class="fa-brands fa-facebook-messenger"></i>
         </a>
     </div>
-
     <!-- Nạp Firebase SDK từ CDN -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <section class="gallery-section container">
+        <h3 class="gallery-title"><i class="fa-solid fa-camera"></i> Hình Ảnh Homestay</h3>
+
+        <div class="gallery-grid">
+            <div class="gallery-item"><img src="images/phong-ngu1.jpg" alt="Không gian Homestay 1"></div>
+            <div class="gallery-item"><img src="images/pn2.jpg" alt="Không gian Homestay 2"></div>
+            <div class="gallery-item"><img src="images/phong-khach.jpg" alt="Không gian Homestay 3"></div>
+            <div class="gallery-item"><img src="images/ban-ghe.jpg" alt="Không gian Homestay 4"></div>
+            <div class="gallery-item"><img src="images/phong-tam.jpg" alt="Không gian Homestay 5"></div>
+            <div class="gallery-item"><img src="images/san-vuon2.jpg" alt="Không gian Homestay 6"></div>
+            <div class="gallery-item"><img src="images/san-vuon.jpg" alt="Không gian Homestay 7"></div>
+            <div class="gallery-item"><img src="images/goc-truoc-cua.jpg" alt="Không gian Homestay 8"></div>
+        </div>
+    </section>
 
     <!-- File Script chính của dự án -->
     <script src="script.js"></script>
-</body>
-<!-- ================= FOOTER ================= -->
-<footer class="site-footer">
-    <div class="footer-container">
-        <!-- Cột 1: Giới thiệu ngắn -->
-        <div class="footer-col">
-            <h3><i class="fa-solid fa-house-chimney"></i> Tuni's House</h3>
-            <p>Tuni biết bạn có nhiều lựa sự lựa chọn.
-                Cảm ơn bạn đã cho Tuni được đồng hành cùng bạn.</p>
-            <div class="footer-socials">
-                <a href="https://facebook.com" target="_blank" title="Facebook"><i
-                        class="fa-brands fa-facebook-f"></i></a>
-                <a href="https://zalo.me/0981081915" target="_blank" title="Zalo"><i
-                        class="fa-solid fa-comment-sms"></i></a>
-                <a href="tel:0981081915" title Hotline><i class="fa-solid fa-phone"></i></a>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <!-- Cột 1: Giới thiệu ngắn -->
+            <div class="footer-col">
+                <h3><i class="fa-solid fa-house-chimney"></i> Tuni's House</h3>
+                <p>Tuni biết bạn có nhiều lựa sự lựa chọn.
+                    Cảm ơn bạn đã cho Tuni được đồng hành cùng bạn.</p>
+                <div class="footer-socials">
+                    <a href="https://facebook.com" target="_blank" title="Facebook"><i
+                            class="fa-brands fa-facebook-f"></i></a>
+                    <a href="https://zalo.me/0981081915" target="_blank" title="Zalo"><i
+                            class="fa-solid fa-comment-sms"></i></a>
+                    <a href="tel:0981081915" title="Hotline"><i class="fa-solid fa-phone"></i></a>
+                </div>
+            </div>
+
+            <!-- Cột 2: Liên kết nhanh -->
+            <div class="footer-col">
+                <h4>Khám Phá</h4>
+                <ul>
+                    <li><a href="#about"><i class="fa-solid fa-angle-right"></i> Về chúng tôi</a></li>
+                    <li><a href="#amenities"><i class="fa-solid fa-angle-right"></i> Tiện nghi & Dịch vụ</a></li>
+                    <li><a href="#calendar-section"><i class="fa-solid fa-angle-right"></i> Kiểm tra lịch đặt phòng</a></li>
+                    <li><a href="admin.html" target="_blank"><i class="fa-solid fa-angle-right"></i> Trang Quản
+                            Lý (Admin)</a></li>
+                </ul>
+            </div>
+
+            <!-- Cột 3: Thông tin liên hệ -->
+            <div class="footer-col">
+                <h4>Liên Hệ</h4>
+                <p><i class="fa-solid fa-location-dot"></i><a href="https://maps.app.goo.gl/G5sUv4R32t4eu8Tp8" target="_blank" 
+                        rel="noopener noreferrer" style="color: inherit;"
+                        >Địa chỉ: 56 Phan Văn Trị, Khu phố 6, Lagi, Lâm Đồng</a>
+                </p>
+
+                <p><i class="fa-brands fa-facebook"></i>
+                    <a href="https://www.facebook.com/tunihousehomestaylagi" target="_blank" 
+                        rel="noopener noreferrer" style="color: inherit;">
+                        Facebook: Tuni's House - Homestay Lagi </a>
+                </p>
+                <p>
+                    <i class="fa-brands fa-tiktok"></i>
+                    <a href="https://www.tiktok.com/@tunihomestaylagi?is_from_webapp=1&sender_device=pc" target="_blank"
+                        rel="noopener noreferrer" style="color: inherit;">
+                        Tiktok: Tuni Homestay Lagi
+                    </a>
+                </p>
+                <p><i class="fa-solid fa-phone-volume"></i> Hotline / Zalo: 070.443.3805 - Mr. Tuấn</p>
+                <p><i class="fa-solid fa-envelope"></i> Email: tunihomestay@gmail.com</p>
             </div>
         </div>
 
-        <!-- Cột 2: Liên kết nhanh -->
-        <div class="footer-col">
-            <h4>Khám Phá</h4>
-            <ul>
-                <li><a href="#about"><i class="fa-solid fa-angle-right"></i> Về chúng tôi</a></li>
-                <li><a href="#amenities"><i class="fa-solid fa-angle-right"></i> Tiện nghi & Dịch vụ</a></li>
-                <li><a href="#calendar-section"><i class="fa-solid fa-angle-right"></i> Đặt lịch phòng</a></li>
-                <li><a href="admin.html" target="_blank"><i class="fa-solid fa-angle-right"></i> Trang Quản
-                        Lý(Admin)</a></li>
-            </ul>
+        <!-- Dòng bản quyền phía dưới -->
+        <div class="footer-bottom">
+            <p>Bản quyền thuộc về Tuni's House &copy; 2026</p>
         </div>
-
-        <!-- Cột 3: Thông tin liên hệ -->
-        <div class="footer-col">
-            <h4>Liên Hệ</h4>
-            <p><i class="fa-solid fa-location-dot"></i><a href="https://maps.app.goo.gl/G5sUv4R32t4eu8Tp8"
-                    style="color: inherit">Địa chỉ: 56 Phan Văn Trị, Khu phố 6, Lagi, Lâm Đồng</a></p>
-
-            <p><i class="fa-brands fa-facebook"></i><a href="https://www.facebook.com/tunihousehomestaylagi"
-                    style="color: inherit">Facebook: Tuni's House - Homestay Lagi </a></p>
-            <p><i class="fa-brands fa-tiktok"></i><a
-                    href="https://www.tiktok.com/@tunihomestaylagi?is_from_webapp=1&sender_device=pc"
-                    style="color: inherit;">Tiktok: Tuni Homestay Lagi</a></p>
-            <p><i class="fa-solid fa-phone-volume"></i> Hotline / Zalo: 070.443.3805 - Mr. Tuấn</p>
-            <p><i class="fa-solid fa-envelope"></i> Email: tunihomestay@gmail.com</p>
-        </div>
-    </div>
-
-    <!-- Dòng bản quyền phía dưới -->
-    <div class="footer-bottom">
-        <p>Bản quyền thuộc về Tuni's House &copy; 2026</p>
-    </div>
-</footer>
+    </footer>
+</body>
 
 </html>

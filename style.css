@@ -8,7 +8,6 @@
 
 body {
     background-color: #8c9890;
-    /* Dark grey-green background like screenshot */
     color: #333;
 }
 
@@ -21,7 +20,6 @@ body {
 /* --- FOOTER STYLES --- */
 .site-footer {
     background-color: #1e293b;
-    /* Màu nền tối sang trọng, phù hợp tone xanh homestay */
     color: #cbd5e1;
     padding: 50px 20px 20px 20px;
     margin-top: 60px;
@@ -59,7 +57,6 @@ body {
     padding-bottom: 8px;
 }
 
-/* Đường gạch chân nhỏ dưới tiêu đề cột */
 .footer-col h4::after {
     content: '';
     position: absolute;
@@ -103,7 +100,6 @@ body {
     transform: translateX(4px);
 }
 
-/* Mạng xã hội footer */
 .footer-socials {
     display: flex;
     gap: 12px;
@@ -128,23 +124,11 @@ body {
     transform: translateY(-3px);
 }
 
-/* Phần bản quyền thấp nhất */
 .footer-bottom {
     text-align: center;
     padding-top: 20px;
     color: #64748b;
     font-size: 13px;
-}
-
-/* Responsive cho thiết bị di động */
-@media screen and (max-width: 768px) {
-    .site-footer {
-        padding: 35px 15px 15px 15px;
-    }
-
-    .footer-container {
-        gap: 25px;
-    }
 }
 
 /* HERO SECTION */
@@ -203,7 +187,9 @@ body {
     justify-content: center;
 }
 
-/* FEATURES SECTION */
+/* ==========================================
+   FEATURES SECTION (ĐÃ THU GỌN KHUNG TRẮNG, TĂNG CHIỀU CAO ẢNH)
+   ========================================== */
 .features {
     display: flex;
     gap: 20px;
@@ -218,42 +204,44 @@ body {
     overflow: hidden;
     flex: 1;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    /* Bỏ cố định 320px để khung tự ôm sát vừa vặn */
+}
+
+.feature-card .card-img {
+    width: 100%;
+    height: 230px;
+    /* Tăng chiều cao ảnh để hiển thị to rõ hơn */
+    overflow: hidden;
 }
 
 .feature-card img {
     width: 100%;
-    height: 160px;
+    height: 100%;
     object-fit: cover;
+    display: block;
+}
+
+.feature-card .card-text {
+    padding: 12px 8px;
+    /* Tối ưu padding gọn gàng */
+    text-align: center;
 }
 
 .feature-card h3 {
     font-size: 0.9rem;
-    padding: 10px 10px 5px 10px; /* Giảm padding trên dưới của tiêu đề */
+    font-weight: 700;
+    color: #1e293b;
+    text-align: center;
+    margin: 0;
+    text-transform: uppercase;
 }
 
-.feature-card p, .center-card .card-text {
-    padding: 0 10px 15px 10px;
-    font-size: 0.8rem; /* Thu nhỏ cỡ chữ mô tả một chút cho thanh thoát */
-    color: #555;
-    line-height: 1.3;
-}
-
-.feature-card.card {
-    display: flex;
-    flex-direction: column;
-}
-
-.card .card-text {
-    padding: 10px 15px 15px;
-    font-size: 0.85rem;
-    color: #555;
-    text-align: left;
-    line-height: 1.4;
-}
-
-.card h3 {
-    padding: 5px 0 5px 0;
+.feature-card p {
+    display: none;
+    /* Ẩn đoạn mô tả nếu còn sót thẻ <p> trong HTML */
 }
 
 /* BOOKING & CALENDAR SECTION */
@@ -264,7 +252,6 @@ body {
 
 .section-title-banner {
     background-color: #e2f0e5;
-    /* Soft light green */
     text-align: center;
     padding: 15px 0;
     margin-bottom: 25px;
@@ -381,6 +368,8 @@ body {
     justify-content: center;
     gap: 3px;
     cursor: pointer;
+    position: relative;
+    user-select: none;
 }
 
 .day-cell.other-month {
@@ -403,14 +392,7 @@ body {
     color: #31708f;
 }
 
-.day-cell.active-today {
-    border: 2px solid #337ab7;
-    border-radius: 50%;
-    width: 32px;
-    height: 32px;
-    margin: 0 auto;
-}
-
+.day-cell.active-today,
 .day-cell.selected-day {
     border: 2px solid #337ab7;
     border-radius: 50%;
@@ -419,30 +401,16 @@ body {
     margin: 0 auto;
 }
 
-/* Highlight phủ kín toàn bộ ô khi khách click chọn ngày */
 .calendar-grid .day-cell.selected-day {
-    background-color: #f39c12 !important;
-    /* Màu nền cam nổi bật phủ kín ô */
+    background-color: #2563eb !important;
     color: #ffffff !important;
-    /* Chữ đổi sang màu trắng cho dễ nhìn */
     font-weight: bold !important;
-    /* In đậm số ngày */
     border-radius: 6px !important;
-    /* Bo nhẹ 4 góc cho đẹp mắt */
-    box-shadow: 0 0 10px rgba(243, 156, 18, 0.6);
-    /* Đổ bóng nhẹ tạo hiệu ứng viền phát sáng */
+    box-shadow: 0 0 10px rgba(37, 99, 235, 0.5);
     transition: all 0.2s ease-in-out;
 }
 
-/* Đảm bảo ô ngày có vị trí tương đối để hiệu ứng hiển thị chuẩn */
-.calendar-grid .day-cell {
-    position: relative;
-    cursor: pointer;
-    user-select: none;
-}
-
 /* NOTICE BOX */
-/* Styling lại khung Notice Box */
 .notice-box {
     margin: 16px 0;
 }
@@ -455,7 +423,6 @@ body {
     transition: all 0.3s ease;
 }
 
-/* Thẻ thông báo mặc định */
 .notice-info {
     background-color: #f8fafc;
     border: 1px solid #e2e8f0;
@@ -483,7 +450,6 @@ body {
     color: #f59e0b;
 }
 
-/* Thẻ sau khi đã chọn ngày */
 .notice-success {
     background-color: #f0fdf4;
     border: 1px solid #bbf7d0;
@@ -540,12 +506,13 @@ body {
     align-items: center;
     gap: 6px;
 }
+
 .selected-warning {
     margin-top: 8px;
     padding-top: 8px;
     border-top: 1px dashed #bbf7d0;
     font-size: 12px;
-    color: #b45309; /* Màu cam nâu dễ nhìn, không bị chói */
+    color: #b45309;
     display: flex;
     align-items: center;
     gap: 6px;
@@ -555,7 +522,6 @@ body {
     color: #f59e0b;
     font-size: 13px;
 }
-
 
 /* ZALO BUTTON */
 .zalo-btn {
@@ -579,22 +545,33 @@ body {
     background-color: #155cb4;
 }
 
-/* QR MODAL PREVIEW (as shown floating in screenshot) */
+/* QR MODAL PREVIEW */
 .qr-modal-preview {
+    display: none;
     position: fixed;
-    bottom: 50px;
-    left: 40px;
-    z-index: 100;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+}
+
+.qr-modal-preview.active {
+    display: flex !important;
 }
 
 .qr-card {
-    background: #fff;
-    padding: 20px;
-    border-radius: 12px;
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 16px;
     text-align: center;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
-    width: 220px;
     position: relative;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    max-width: 320px;
+    width: 90%;
 }
 
 .qr-card .close-btn {
@@ -633,7 +610,6 @@ body {
     margin-top: 3px;
 }
 
-/* Styling form nhập thông tin trong Modal QR */
 .customer-info-form {
     margin: 15px 0 10px 0;
     text-align: left;
@@ -690,128 +666,21 @@ body {
     cursor: pointer;
 }
 
-/* RESPONSIVE DESIGN */
-@media (max-width: 768px) {
-    .features {
-        flex-direction: column;
-    }
-
-    .booking-container {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .calendar-box,
-    .legend-box {
-        width: 100%;
-        max-width: 400px;
-    }
-
-    .qr-modal-preview {
-        position: relative;
-        bottom: auto;
-        left: auto;
-        margin: 20px auto;
-        display: flex;
-        justify-content: center;
-    }
-}
-
-/* Mặc định ẩn popup QR */
-.qr-modal-preview {
-    display: none;
-    /* Ẩn mặc định */
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.6);
-    /* Lớp nền tối mờ toàn màn hình */
-    z-index: 9999;
-    justify-content: center;
-    align-items: center;
-}
-
-/* Khi có class "active" sẽ bật ra giữa màn hình */
-.qr-modal-preview.active {
-    display: flex !important;
-}
-
-/* Thẻ card chứa hình QR */
-.qr-card {
-    background: #ffffff;
-    padding: 25px;
-    border-radius: 16px;
-    text-align: center;
-    position: relative;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-    max-width: 320px;
-    width: 90%;
-}
-
-/* Khóa không cho nhấp chuột vào ngày đã cọc hoặc chờ cọc */
+/* Khóa bấm ngày đã cọc */
 .day-cell.booked,
 .day-cell.pending {
     cursor: not-allowed !important;
-    /* Hiện biểu tượng cấm chọn */
     opacity: 0.8;
 }
 
-/* Đảm bảo ngày chọn đè lên chuẩn màu xanh dương nổi bật */
-.day-cell.selected-day {
-    background-color: #2563eb !important;
-    color: #ffffff !important;
-    border-radius: 6px;
-}
-
-/* Tối ưu hóa giao diện cho màn hình điện thoại nhỏ */
-@media screen and (max-width: 600px) {
-    body {
-        padding: 10px;
-        /* Giảm khoảng cách lề cho màn hình nhỏ */
-    }
-
-    .admin-card,
-    .calendar-container {
-        width: 100% !important;
-        padding: 15px !important;
-    }
-
-    /* Thu nhỏ kích thước ô lịch trên điện thoại để không bị tràn */
-    .calendar-grid .day-cell {
-        min-height: 38px;
-        font-size: 14px;
-    }
-
-    /* Đảm bảo các nút bấm full chiều ngang dễ thao tác */
-    .action-btns {
-        flex-direction: column;
-        gap: 8px;
-    }
-}
-
-/* Đảm bảo trạng thái ẩn mặc định cho Modal QR */
-.qr-modal-preview {
-    display: none;
-}
-
-/* Khi Javascript thêm class active thì hiển thị dạng Flex căn giữa */
-.qr-modal-preview.active {
-    display: flex !important;
-}
-
-/* Tạo khoảng cách trống phía trên khi cuộn tới các mục */
 html {
     scroll-behavior: smooth;
-    /* Giúp trang cuộn mượt mà */
 }
 
 #about,
 #amenities,
 #calendar-section {
     scroll-margin-top: 80px;
-    /* Chừa khoảng trống 80px ở phía trên khi trôi đến */
 }
 
 .top-bar-notice {
@@ -821,4 +690,120 @@ html {
     padding: 8px 10px;
     font-size: 0.8rem;
     letter-spacing: 0.3px;
+}
+
+/* --- GALLERY ANH HOMESTAY --- */
+.gallery-section {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.gallery-title {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+
+.gallery-item {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    aspect-ratio: 4 / 3;
+    background-color: #e2e8f0;
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+    display: block;
+}
+
+.gallery-item:hover img {
+    transform: scale(1.06);
+}
+
+/* --- GALLERY ANH HOMESTAY TO TRÀN MÀN HÌNH --- */
+.gallery-section {
+    width: 100%;
+    max-width: 100% !important;
+    /* Mở rộng tối đa toàn màn hình */
+    padding: 0 20px;
+    /* Chừa tí lề 2 bên để không dính sát mép trình duyệt */
+    margin: 40px auto;
+    box-sizing: border-box;
+}
+
+.gallery-title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    justify-content: center;
+    /* Căn giữa các ô ảnh */
+    max-width: 1350px;
+    /* Khung chứa tối đa để ảnh không bị quá xé to */
+    margin: 0 auto;
+    /* Căn toàn bộ grid ra đúng CHÍNH GIỮA màn hình */
+    width: 100%;
+}
+
+.gallery-item {
+    position: relative;
+    width: 100%;
+    /* Để width tự co giãn theo grid thay vì fix 320px */
+    height: 360px;
+    /* Giữ nguyên chiều cao 360px đúng ý bạn */
+    overflow: hidden;
+    border-radius: 4px;
+    background-color: #e2e8f0;
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Ảnh tự cắt lấp đầy khung 360px không bị méo */
+    display: block;
+}
+
+.gallery-item:hover img {
+    transform: scale(1.05);
+}
+
+/* RESPONSIVE CHO MÀN HÌNH NHỎ */
+@media screen and (max-width: 900px) {
+    .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .gallery-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
 }
