@@ -633,6 +633,45 @@ body {
     margin-top: 3px;
 }
 
+/* Styling form nhập thông tin trong Modal QR */
+.customer-info-form {
+    margin: 15px 0 10px 0;
+    text-align: left;
+}
+
+.customer-info-form .input-group {
+    margin-bottom: 10px;
+}
+
+.customer-info-form label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 4px;
+}
+
+.customer-info-form label i {
+    color: #2563eb;
+    margin-right: 4px;
+}
+
+.customer-info-form input {
+    width: 100%;
+    padding: 9px 12px;
+    font-size: 13.5px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.customer-info-form input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
 /* FLOATING MESSENGER WIDGET */
 .floating-widget {
     position: fixed;

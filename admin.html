@@ -54,7 +54,8 @@
             margin-bottom: 6px;
         }
 
-        .form-group input, .form-group select {
+        .form-group input,
+        .form-group select {
             width: 100%;
             padding: 12px 14px;
             border: 1.5px solid #e2e8f0;
@@ -65,7 +66,8 @@
             background: #fff;
         }
 
-        .form-group input:focus, .form-group select:focus {
+        .form-group input:focus,
+        .form-group select:focus {
             border-color: #3b82f6;
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
         }
@@ -179,14 +181,51 @@
             margin-bottom: 12px;
         }
 
-        .booking-date {
+        .customer-detail {
+            background: #f1f5f9;
+            padding: 10px 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .customer-name {
             font-size: 15px;
+            font-weight: 700;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+
+        }
+
+        .customer-phone {
+            font-size: 13px;
+            color: #2563eb;
+            font-weight: 600;
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .customer-phone a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .customer-phone a:hover {
+            text-decoration: underline;
+        }
+
+        .booking-date {
+            font-size: 14px;
             font-weight: 700;
             color: #0f172a;
             display: flex;
             align-items: center;
             gap: 8px;
             flex-wrap: wrap;
+            margin-top: 6px;
         }
 
         .booking-date i {
@@ -380,11 +419,18 @@
                 <div class="manual-booking-title">
                     <i class="fa-solid fa-calendar-plus" style="color: #2563eb;"></i> Khóa Phòng Thủ Công
                 </div>
-                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
-                    <input type="date" id="manual-start" style="padding: 8px; border-radius: 6px; border: 1px solid #ccc; width: 50%;">
-                    <input type="date" id="manual-end" style="padding: 8px; border-radius: 6px; border: 1px solid #ccc; width: 50%;">
+                <div style="margin-bottom: 8px;">
+                    <input type="text" id="manual-name" placeholder="Tên khách đặt (VD: Anh Minh)"
+                        style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc; font-size: 13px;">
                 </div>
-                <button class="btn-main btn-primary" onclick="createManualBooking()" style="padding: 8px; font-size: 13px;">
+                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                    <input type="date" id="manual-start"
+                        style="padding: 8px; border-radius: 6px; border: 1px solid #ccc; width: 50%; font-size: 13px;">
+                    <input type="date" id="manual-end"
+                        style="padding: 8px; border-radius: 6px; border: 1px solid #ccc; width: 50%; font-size: 13px;">
+                </div>
+                <button class="btn-main btn-primary" onclick="createManualBooking()"
+                    style="padding: 8px; font-size: 13px;">
                     <i class="fa-solid fa-lock"></i> Khóa Lịch Ngày Này
                 </button>
             </div>
@@ -402,10 +448,11 @@
             </div>
 
             <!-- NÚT CHỨC NĂNG PHỤ -->
-            <button class="btn-main" style="background: #f59e0b; color: white; margin-top: 20px;" onclick="cleanTrashBookings(this)">
+            <button class="btn-main" style="background: #f59e0b; color: white; margin-top: 20px;"
+                onclick="cleanTrashBookings(this)">
                 <i class="fa-solid fa-broom"></i> Dọn Rác Đơn Hủy
             </button>
-            
+
             <button class="btn-main btn-logout" id="btn-logout">
                 <i class="fa-solid fa-right-from-bracket"></i> Đăng Xuất
             </button>
@@ -498,7 +545,7 @@
         }
 
         // BỘ LỌC
-        window.setFilter = function(filter, btn) {
+        window.setFilter = function (filter, btn) {
             currentFilter = filter;
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
@@ -522,10 +569,36 @@
                 if (data.status === 'pending' || data.status === 'booked') {
                     count++;
                     const isPending = data.status === 'pending';
-                    const totalDays = data.dates ? data.dates.length : 1;
-                    const rangeDisplay = data.start_date === data.end_date
-                        ? formatDate(data.start_date)
-                        : `${formatDate(data.start_date)} ➔ ${formatDate(data.end_date)}`;
+
+                    // --- XỬ LÝ TÍNH SỐ ĐÊM VÀ NGÀY TRẢ PHÒNG CHUẨN ---
+                    let totalNights = 1;
+                    let startDateStr = data.start_date;
+                    let endDateStr = data.end_date;
+
+                    if (startDateStr && endDateStr) {
+                        const s = new Date(startDateStr);
+                        let e = new Date(endDateStr);
+
+                        // Nếu khách chọn ngày nhận trùng ngày trả (1 đêm), tự động cộng 1 ngày cho ngày trả
+                        if (startDateStr === endDateStr) {
+                            e.setDate(e.getDate() + 1);
+                            const yyyy = e.getFullYear();
+                            const mm = String(e.getMonth() + 1).padStart(2, '0');
+                            const dd = String(e.getDate()).padStart(2, '0');
+                            endDateStr = `${yyyy}-${mm}-${dd}`;
+                        }
+
+                        const diffTime = Math.abs(e - s);
+                        totalNights = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) || 1;
+                    }
+
+                    // Luôn hiển thị đầy đủ dải ngày: [Ngày nhận] ➔ [Ngày trả]
+                    const rangeDisplay = `${formatDate(startDateStr)} ➔ ${formatDate(endDateStr)}`;
+                    // ------------------------------------------------
+
+                    // Thông tin khách hàng
+                    const customerName = data.customer_name ? data.customer_name : 'Khách không nhập tên';
+                    const customerPhone = data.customer_phone ? data.customer_phone : 'Khách không nhập SĐT';
 
                     // Tính thời gian hết hạn cọc
                     let expireText = '';
@@ -534,44 +607,56 @@
                     if (isPending && data.pending_until) {
                         const now = Date.now();
                         const diffMins = Math.round((data.pending_until - now) / (1000 * 60));
-                        
+
                         if (diffMins > 0) {
-                            expireText = `<div class="expire-time"><i class="fa-regular fa-clock"></i> Còn lại: <strong>${diffMins} phút</strong></div>`;
+                            expireText = `<div class="expire-time"><i class="fa-regular fa-clock"></i> Thời gian giữ chỗ còn: <strong>${diffMins} phút</strong></div>`;
                         } else {
                             expireText = `<div class="expire-time" style="color: red;"><i class="fa-solid fa-triangle-exclamation"></i> Đã quá hạn 60p</div>`;
                         }
 
                         // Nút gia hạn thời gian
                         extendHtml = `
-                        <div class="extend-btns">
-                            <span class="extend-label"><i class="fa-solid fa-hourglass-plus"></i> Gia hạn:</span>
-                            <button class="btn-extend" onclick="extendPendingTime('${bookingId}', 30)">+30 phút</button>
-                            <button class="btn-extend" onclick="extendPendingTime('${bookingId}', 60)">+60 phút</button>
-                        </div>
-                        `;
+                <div class="extend-btns">
+                    <span class="extend-label"><i class="fa-solid fa-hourglass-plus"></i> Gia hạn:</span>
+                    <button class="btn-extend" onclick="extendPendingTime('${bookingId}', 30)">+30 phút</button>
+                    <button class="btn-extend" onclick="extendPendingTime('${bookingId}', 60)">+60 phút</button>
+                </div>
+                `;
                     }
 
                     const item = document.createElement('div');
                     item.className = 'booking-card';
                     item.innerHTML = `
-                    <div class="booking-info">
-                        <div class="booking-date">
-                            <i class="fa-regular fa-calendar-days"></i> ${rangeDisplay}
-                            <span class="booking-days">(${totalDays} ngày)</span>
-                        </div>
-                        <div>
-                            <span class="badge-status ${isPending ? 'badge-pending' : 'badge-booked'}">
-                                ${isPending ? '<i class="fa-solid fa-hourglass-half"></i> Đang chờ cọc' : '<i class="fa-solid fa-circle-check"></i> Đã chốt cọc'}
-                            </span>
-                        </div>
-                        ${expireText}
-                        ${extendHtml}
+            <div class="customer-detail">
+                <div class="customer-name"><i class="fa-solid fa-user"></i> ${customerName}</div>
+                ${data.customer_phone ? `
+                    <div class="customer-phone">
+                        <i class="fa-solid fa-phone"></i> 
+                        <a href="tel:${customerPhone}">${customerPhone}</a> 
+                        | <a href="https://zalo.me/${customerPhone}" target="_blank" style="color:#0068ff;"><i class="fa-solid fa-comment"></i> Zalo</a>
                     </div>
-                    <div class="action-btns">
-                        ${isPending ? `<button class="btn-approve" onclick="updateBooking(this, '${bookingId}', 'booked')"><i class="fa-solid fa-check"></i> Duyệt Cọc</button>` : ''}
-                        <button class="btn-cancel" onclick="updateBooking(this, '${bookingId}', 'available')"><i class="fa-solid fa-xmark"></i> Hủy Lịch</button>
-                    </div>
-                    `;
+                ` : '<div class="customer-phone" style="color:#94a3b8;"><i class="fa-solid fa-phone"></i> Không có SĐT</div>'}
+            </div>
+
+            <div class="booking-info">
+                <div class="booking-date">
+                    <i class="fa-regular fa-calendar-days"></i> ${rangeDisplay}
+                    <span class="booking-days">(${totalNights} đêm)</span>
+                </div>
+                <div>
+                    <span class="badge-status ${isPending ? 'badge-pending' : 'badge-booked'}">
+                        ${isPending ? '<i class="fa-solid fa-hourglass-half"></i> Đang chờ cọc' : '<i class="fa-solid fa-circle-check"></i> Đã chốt cọc'}
+                    </span>
+                </div>
+                ${expireText}
+                ${extendHtml}
+            </div>
+
+            <div class="action-btns">
+                ${isPending ? `<button class="btn-approve" onclick="updateBooking(this, '${bookingId}', 'booked')"><i class="fa-solid fa-check"></i> Duyệt Cọc</button>` : ''}
+                <button class="btn-cancel" onclick="updateBooking(this, '${bookingId}', 'available')"><i class="fa-solid fa-xmark"></i> Hủy Lịch</button>
+            </div>
+            `;
                     bookingList.appendChild(item);
                 }
             });
@@ -580,7 +665,6 @@
                 bookingList.innerHTML = `<div class="empty-msg"><i class="fa-regular fa-folder-open"></i><br>Không có đơn đặt phòng nào!</div>`;
             }
         }
-
         function formatDate(str) {
             if (!str) return '';
             const p = str.split('-');
@@ -588,7 +672,7 @@
         }
 
         // HÀM GIA HẠN THỜI GIAN GIỮ CHỖ
-        window.extendPendingTime = async function(bookingId, extraMinutes) {
+        window.extendPendingTime = async function (bookingId, extraMinutes) {
             try {
                 const docSnap = await db.collection("bookings").doc(bookingId).get();
                 if (!docSnap.exists) {
@@ -598,22 +682,19 @@
 
                 const data = docSnap.data();
                 const now = Date.now();
-                // Nếu đã hết hạn thì cộng từ bây giờ, nếu chưa hết hạn thì cộng nối tiếp vào thời gian cũ
                 const currentExpire = (data.pending_until && data.pending_until > now) ? data.pending_until : now;
                 const newPendingUntil = currentExpire + (extraMinutes * 60 * 1000);
 
                 const batch = db.batch();
 
-                // 1. Cập nhật booking
                 batch.update(db.collection("bookings").doc(bookingId), {
                     pending_until: newPendingUntil
                 });
 
-                // 2. Cập nhật từng ngày trong calendar
                 if (data.dates && Array.isArray(data.dates)) {
                     data.dates.forEach(d => {
-                        batch.set(db.collection("calendar").doc(d), { 
-                            pending_until: newPendingUntil 
+                        batch.set(db.collection("calendar").doc(d), {
+                            pending_until: newPendingUntil
                         }, { merge: true });
                     });
                 }
@@ -677,7 +758,8 @@
         };
 
         // TẠO ĐƠN THỦ CÔNG
-        window.createManualBooking = async function() {
+        window.createManualBooking = async function () {
+            const name = document.getElementById('manual-name').value.trim() || 'Khách khóa ngoài';
             const start = document.getElementById('manual-start').value;
             const end = document.getElementById('manual-end').value;
 
@@ -708,6 +790,8 @@
                 const bookingId = `${start}_to_${end}_manual`;
 
                 batch.set(db.collection("bookings").doc(bookingId), {
+                    customer_name: name,
+                    customer_phone: "Khóa thủ công",
                     start_date: start,
                     end_date: end,
                     dates: dates,
@@ -716,11 +800,15 @@
                 });
 
                 dates.forEach(d => {
-                    batch.set(db.collection("calendar").doc(d), { status: 'booked' }, { merge: true });
+                    batch.set(db.collection("calendar").doc(d), {
+                        status: 'booked',
+                        customer_name: name
+                    }, { merge: true });
                 });
 
                 await batch.commit();
                 alert("✅ Đã khóa lịch thành công cho khách!");
+                document.getElementById('manual-name').value = '';
                 document.getElementById('manual-start').value = '';
                 document.getElementById('manual-end').value = '';
             } catch (e) {

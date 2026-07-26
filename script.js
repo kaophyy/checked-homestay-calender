@@ -172,11 +172,11 @@ document.addEventListener('DOMContentLoaded', function () {
         selectedDates = [];
 
         if (startDate && !endDate) {
+            // Mới chọn 1 ngày
             const cell = document.querySelector(`.day-cell[data-date="${startDate}"]`);
             if (cell) cell.classList.add('selected-day');
             selectedDates.push(startDate);
 
-            // Cập nhật khung thông báo với 1 ngày đã chọn
             updateNoticeDisplay(startDate, null, 1);
 
         } else if (startDate && endDate) {
@@ -184,15 +184,23 @@ document.addEventListener('DOMContentLoaded', function () {
             const startD = new Date(startDate);
             const endD = new Date(endDate);
 
+            startD.setHours(0, 0, 0, 0);
+            endD.setHours(0, 0, 0, 0);
+
             calendarCells.forEach(cell => {
                 const cellDateStr = cell.getAttribute('data-date');
                 if (cellDateStr) {
                     const cellD = new Date(cellDateStr);
-                    // Chỉ tô màu khi nằm đúng trong khoảng ngày được chọn
+                    cellD.setHours(0, 0, 0, 0);
+
+                    // Tô màu TẤT CẢ các ngày trong khoảng từ startDate đến endDate (bao gồm cả ngày 27)
                     if (cellD >= startD && cellD <= endD) {
                         cell.classList.add('selected-day');
                         selectedDates.push(cellDateStr);
+                    }
 
+                    // Nhưng CHỈ KIỂM TRA TRÙNG LỊCH các đêm ở lại (< endD)
+                    if (cellD >= startD && cellD < endD) {
                         if (cell.classList.contains('booked') || cell.classList.contains('pending')) {
                             hasBookedOrPending = true;
                         }
@@ -200,14 +208,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
 
-            // Cập nhật khung thông báo với dải ngày đã chọn
-            updateNoticeDisplay(startDate, endDate, selectedDates.length, hasBookedOrPending);
+            // Tính số đêm/ngày ở (VD: 26/07 -> 27/07 là 1 đêm)
+            const timeDiff = Math.abs(endD - startD);
+            const totalDays = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)) || 1;
 
-            if (hasBookedOrPending) {
-                alert("Trong khoảng ngày bạn chọn có chứa ngày đã được đặt hoặc chờ xác nhận!");
-            }
+            updateNoticeDisplay(startDate, endDate, totalDays, hasBookedOrPending);
+
         } else {
-            // Trường hợp chưa chọn ngày nào
             updateNoticeDisplay(null, null, 0);
         }
     }
@@ -218,14 +225,47 @@ document.addEventListener('DOMContentLoaded', function () {
         return `${parts[2]}/${parts[1]}/${parts[0]}`;
     }
 
-    // --- D. BẤM NÚT ĐẶT PHÒNG / GIỮ CHỖ CẢ KHOẢNG NGÀY ---
+    // --- D. BẤM NÚT "LIÊN HỆ QUA ZALO" -> MỞ MODAL ĐIỀN THÔNG TIN ---
     if (zaloBtn) {
-        zaloBtn.addEventListener('click', async function () {
+        zaloBtn.addEventListener('click', function () {
             if (selectedDates.length === 0) {
                 alert("Vui lòng nhấp chọn ngày nhận phòng và trả phòng trên lịch!");
                 return;
             }
 
+            // Mở Modal cho khách điền thông tin
+            if (qrModal) {
+                qrModal.classList.add('active');
+                qrModal.style.display = 'flex';
+            }
+        });
+    }
+
+    // --- E. BẤM NÚT "GỬI THÔNG TIN ĐẶT PHÒNG" ---
+    const confirmBookingBtn = document.getElementById('btn-confirm-booking');
+
+    if (confirmBookingBtn) {
+        confirmBookingBtn.addEventListener('click', async function () {
+            const nameInput = document.getElementById('customer-name');
+            const phoneInput = document.getElementById('customer-phone');
+
+            const customerName = nameInput ? nameInput.value.trim() : '';
+            const customerPhone = phoneInput ? phoneInput.value.trim() : '';
+
+            // Bắt buộc nhập tên & SĐT
+            if (!customerName) {
+                alert("Vui lòng nhập Họ và tên của bạn!");
+                if (nameInput) nameInput.focus();
+                return;
+            }
+
+            if (!customerPhone) {
+                alert("Vui lòng nhập Số điện thoại/Zalo liên hệ!");
+                if (phoneInput) phoneInput.focus();
+                return;
+            }
+
+            // Kiểm tra xem khoảng ngày này có bị ai chốt cọc trước đó không
             let isBlocked = false;
             for (let d of selectedDates) {
                 const docSnap = await db.collection("calendar").doc(d).get();
@@ -236,27 +276,33 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (isBlocked) {
-                alert("Trong khoảng thời gian bạn chọn có ngày đã có khách chốt cọc rồi. Vui lòng chọn khoảng ngày khác!");
+                alert("Trong khoảng thời gian bạn chọn đã có khách chốt phòng rồi. Vui lòng chọn ngày khác!");
                 return;
             }
 
             const oneHourLater = Date.now() + (60 * 60 * 1000);
             const batch = db.batch();
 
+            // Lưu thông tin chờ xác nhận vào collection calendar
             selectedDates.forEach(dateId => {
                 const docRef = db.collection("calendar").doc(dateId);
                 batch.set(docRef, {
                     status: 'pending',
+                    customer_name: customerName,
+                    customer_phone: customerPhone,
                     pending_until: oneHourLater,
                     created_at: Date.now()
                 }, { merge: true });
             });
 
+            // Lưu đơn giữ chỗ vào collection bookings
             const bookingId = `${startDate}_to_${endDate || startDate}`;
             const bookingRef = db.collection("bookings").doc(bookingId);
             batch.set(bookingRef, {
                 start_date: startDate,
                 end_date: endDate || startDate,
+                customer_name: customerName,
+                customer_phone: customerPhone,
                 dates: selectedDates,
                 status: 'pending',
                 pending_until: oneHourLater,
@@ -265,14 +311,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
             await batch.commit();
 
+            alert("Gửi thông tin thành công! Đang chuyển hướng sang Zalo để trao đổi chi tiết...");
+
+            // Đóng Modal và tự động mở Zalo của Homestay
             if (qrModal) {
-                qrModal.classList.add('active');
-                qrModal.style.display = 'flex';
+                qrModal.classList.remove('active');
+                qrModal.style.display = 'none';
             }
+            window.open('https://zalo.me/0981081915', '_blank');
         });
     }
 
-    // --- E. ĐÓNG MODAL QR & FLOATING WIDGET ---
+    // --- F. ĐÓNG MODAL QR & FLOATING WIDGET ---
     if (closeQrBtn) {
         closeQrBtn.addEventListener('click', function () {
             if (qrModal) {
@@ -297,7 +347,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // --- F. TỰ ĐỘNG TẠO LỊCH & CHUYỂN THÁNG CHUẨN ---
+    // --- G. TỰ ĐỘNG TẠO LỊCH & CHUYỂN THÁNG CHUẨN ---
     function renderCalendar(month, year) {
         if (titleHeader) titleHeader.innerText = `Tháng ${month}, ${year}`;
 

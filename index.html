@@ -162,7 +162,7 @@
                             <i class="fa-solid fa-circle-info"></i>
                             <div>
                                 <strong>Hướng dẫn:</strong> Nhấp vào ngày bạn muốn đặt để kiểm tra trạng thái và giữ
-                                chỗ.
+                                chỗ. Tải lại trang sau khi gửi thông tin đặt phòng.
                             </div>
                         </div>
                         <div class="notice-item warning">
@@ -209,15 +209,40 @@
     </section>
 
     <!-- Modal Popup / QR Preview -->
-    <div class="qr-modal-preview" id="qr-modal">
+    <div class="qr-modal-preview" id="qr-modal" style="display: none;">
         <div class="qr-card">
             <button class="close-btn" id="close-qr">&times;</button>
-            <h4>QUÉT QR ZALO<br>ĐỂ ĐẶT PHÒNG</h4>
-            <div class="qr-image">
-                <img src="images/qr-code.png" alt="QR Zalo">
+            <h4>THÔNG TIN ĐẶT PHÒNG</h4>
+
+            <!-- KHỐI NHẬP THÔNG TIN KHÁCH HÀNG -->
+            <div class="customer-info-form">
+                <div class="input-group">
+                    <label for="customer-name"><i class="fa-solid fa-user"></i> Họ và tên người đặt:</label>
+                    <input type="text" id="customer-name" placeholder="Ví dụ: Nguyễn Văn A" autocomplete="off">
+                </div>
+                <div class="input-group">
+                    <label for="customer-phone"><i class="fa-solid fa-phone"></i> Số điện thoại / Zalo:</label>
+                    <input type="tel" id="customer-phone" placeholder="Ví dụ: 0912345678" autocomplete="off">
+                </div>
             </div>
-            <p class="qr-sub">QUÉT QR ZALO ĐỂ ĐẶT PHÒNG</p>
-            <p class="hotline">Hotline/Zalo: 0981.081.915 - Mr. Cao Phi</p>
+
+            <!-- NÚT GỬI THÔNG TIN GIỮ CHỖ -->
+            <button id="btn-confirm-booking" class="confirm-btn"
+                style="width: 100%; padding: 11px; background-color: #2563eb; color: #fff; border: none; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer; margin: 10px 0;">
+                <i class="fa-solid fa-paper-plane"></i> GỬI THÔNG TIN ĐẶT PHÒNG
+            </button>
+
+            <hr style="border: 0; border-top: 1px dashed #e2e8f0; margin: 12px 0;">
+
+            <!-- KHỐI QUÉT QR ZALO LIÊN HỆ -->
+            <p class="qr-sub" style="font-size: 13px; font-weight: 600; color: #0f172a; margin-bottom: 8px;">Quét QR để
+                liên hệ Zalo trực tiếp với Homestay:</p>
+            <div class="qr-image">
+                <img src="images/qr-code.png" alt="QR Zalo" style="max-width: 180px;">
+            </div>
+
+            <p class="hotline" style="margin-top: 10px; font-size: 12px; color: #64748b;">Hotline/Zalo: 0981.081.915 -
+                Mr. Cao Phi</p>
         </div>
     </div>
 
