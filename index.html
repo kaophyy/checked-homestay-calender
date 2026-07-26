@@ -12,8 +12,8 @@
 
 <body>
     <div class="top-bar-notice">
-        <span>🚀 Website đang trong giai đoạn chạy thử nghiệm. Mọi đóng góp xin liên hệ Zalo: 0981.081.915 hoặc
-            070.443.3805. Chân thành cảm ơn quý khách!</span>
+        <span>🚀 Website đang trong giai đoạn chạy thử nghiệm. Mọi đóng góp xin liên hệ Zalo:
+            070.443.3805 Chân thành cảm ơn quý khách!</span>
     </div>
 
     <!-- Hero Section -->
@@ -157,15 +157,14 @@
                         <div class="notice-item">
                             <i class="fa-solid fa-circle-info"></i>
                             <div>
-                                <strong>Hướng dẫn:</strong> Nhấp vào ngày bạn muốn đặt để kiểm tra trạng thái và giữ
-                                chỗ. Tải lại trang sau khi gửi thông tin đặt phòng.
+                                <strong>Hướng dẫn:</strong> Chọn ngày bạn muốn đặt để kiểm tra trạng thái và giữ chỗ.
                             </div>
                         </div>
                         <div class="notice-item warning">
                             <i class="fa-solid fa-triangle-exclamation"></i>
                             <div>
                                 <strong>Lưu ý:</strong> Đơn <strong>Chờ xác nhận</strong> sẽ tự động hủy sau 60 phút nếu
-                                chưa hoàn tất cọc.
+                                quý khách chưa hoàn tất liên hệ với Homestay.
                             </div>
                         </div>
                     </div>
@@ -190,7 +189,7 @@
                         <div class="selected-warning">
                             <i class="fa-solid fa-triangle-exclamation"></i>
                             <span><strong>Lưu ý:</strong> Đơn <strong>Chờ xác nhận</strong> sẽ tự động hủy sau 60 phút
-                                nếu chưa hoàn tất cọc hoặc chưa liên hệ với Homestay.</span>
+                                nếu chưa liên hệ với Homestay.</span>
                         </div>
                     </div>
                 </div>
@@ -203,7 +202,7 @@
         </div>
     </section>
 
-    <!-- Modal Popup / QR Preview -->
+    <!-- Modal Popup / Form Điền Thông Tin Đặt Phòng -->
     <div class="qr-modal-preview" id="qr-modal" style="display: none;">
         <div class="qr-card">
             <button class="close-btn" id="close-qr">&times;</button>
@@ -226,28 +225,61 @@
                 style="width: 100%; padding: 11px; background-color: #2563eb; color: #fff; border: none; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer; margin: 10px 0;">
                 <i class="fa-solid fa-paper-plane"></i> GỬI THÔNG TIN ĐẶT PHÒNG
             </button>
+        </div>
+    </div>
 
-            <hr style="border: 0; border-top: 1px dashed #e2e8f0; margin: 12px 0;">
+    <!-- MODAL POPUP MỚI: HIỆN THÔNG BÁO THÀNH CÔNG & NÚT MỞ ZALO CỰC MƯỢT CHO MOBILE -->
+    <div class="qr-modal-preview" id="zalo-success-modal" style="display: none;">
+        <div class="qr-card" style="text-align: center; padding: 24px;">
+            <button class="close-btn" id="close-zalo-success">&times;</button>
 
-            <!-- KHỐI QUÉT QR ZALO LIÊN HỆ -->
-            <p class="qr-sub" style="font-size: 13px; font-weight: 600; color: #0f172a; margin-bottom: 8px;">Quét QR và liên hệ Zalo trực tiếp với Homestay để hoàn thành thủ tục đặt phòng</p>
-            <div class="qr-image">
-                <img src="images/qr-code.png" alt="QR Zalo" style="max-width: 180px;">
+            <div style="font-size: 50px; color: #10b981; margin-bottom: 10px;">
+                <i class="fa-solid fa-circle-check"></i>
             </div>
+            <h4 style="margin-bottom: 10px; color: #0f172a; font-size: 18px;">GỬI THÔNG TIN THÀNH CÔNG!</h4>
 
-            <p class="hotline" style="margin-top: 10px; font-size: 12px; color: #64748b;">070.443.3805 - Mr. Tuấn</p>
+            <p style="font-size: 13px; color: #475569; margin-bottom: 16px; line-height: 1.5;">
+                Tuni's House đã ghi nhận yêu cầu giữ chỗ của Quý khách! Để hoàn tất giữ phòng, Quý khách vui lòng
+                <strong>nhấn nút bên dưới</strong> hoặc <strong>quét mã QR</strong> để nhắn tin Zalo xác nhận cùng chủ
+                nhà ngay nhé.
+            </p>
+
+            <!-- Nút bấm mở Zalo chuẩn Mobile -->
+            <a id="btn-open-zalo-app" href="https://zalo.me/0704433805" target="_blank"
+                style="display: flex; align-items: center; justify-content: center; gap: 8px; background-color: #0068ff; color: #fff; text-decoration: none; padding: 12px; border-radius: 8px; font-weight: bold; font-size: 14px; margin-bottom: 16px; box-shadow: 0 4px 10px rgba(0, 104, 255, 0.3);">
+                <i class="fa-solid fa-comment"></i> NHẮN ZALO XÁC NHẬN NGAY
+            </a>
+
+            <div class="qr-image" style="margin-top: 10px;">
+                <img src="images/qr-code.png" alt="QR Zalo"
+                    style="max-width: 140px; border-radius: 8px; border: 1px solid #e2e8f0;">
+            </div>
+            <p class="hotline" style="margin-top: 10px; font-size: 12px; color: #64748b;">Mã QR Zalo</p>
+
+            <!-- NOTE HỖ TRỢ TRỰC TIẾP KHI GẶP KHÓ KHĂN -->
+            <div
+                style="margin-top: 16px; padding-top: 12px; border-top: 1px dashed #e2e8f0; font-size: 12px; color: #64748b; text-align: center;">
+                <p style="margin: 0; line-height: 1.4;">
+                    💡 <em>Gặp bất kỳ khó khăn nào trong quá trình đặt phòng?</em><br>
+                    Liên hệ ngay Hotline: <a href="tel:0704433805"
+                        style="color: #2563eb; font-weight: bold; text-decoration: none;">070.443.3805 - Mr Tuấn</a> để được hỗ
+                    trợ nhanh nhất!
+                </p>
+            </div>
         </div>
     </div>
 
     <!-- Floating Chat Widget -->
     <div class="floating-widget" id="messenger-widget">
-        <a href="https://tunihousehomestaylagi" style="color: inherit">
+        <a href="https://www.facebook.com/tunihousehomestaylagi" style="color: inherit">
             <i class="fa-brands fa-facebook-messenger"></i>
         </a>
     </div>
+
     <!-- Nạp Firebase SDK từ CDN -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
     <section class="gallery-section container">
         <h3 class="gallery-title"><i class="fa-solid fa-camera"></i> Hình Ảnh Homestay</h3>
 
@@ -275,10 +307,10 @@
                 <p>Tuni biết bạn có nhiều lựa sự lựa chọn.
                     Cảm ơn bạn đã cho Tuni được đồng hành cùng bạn.</p>
                 <div class="footer-socials">
-                    <a href="https://facebook.com" target="_blank" title="Facebook"><i
+                    <a href="https://www.facebook.com/tunihousehomestaylagi" target="_blank" title="Facebook"><i
                             class="fa-brands fa-facebook-f"></i></a>
-                    <a href="https://zalo.me/0981081915" target="_blank" title="Zalo"><i
-                            class="fa-solid fa-comment-sms"></i></a>
+                    <a href="https://zalo.me/0704433805" target="_blank" title="Zalo"><i
+                            class="fa-solid fa-message"></i></a>
                     <a href="tel:0981081915" title="Hotline"><i class="fa-solid fa-phone"></i></a>
                 </div>
             </div>
@@ -289,7 +321,8 @@
                 <ul>
                     <li><a href="#about"><i class="fa-solid fa-angle-right"></i> Về chúng tôi</a></li>
                     <li><a href="#amenities"><i class="fa-solid fa-angle-right"></i> Tiện nghi & Dịch vụ</a></li>
-                    <li><a href="#calendar-section"><i class="fa-solid fa-angle-right"></i> Kiểm tra lịch đặt phòng</a></li>
+                    <li><a href="#calendar-section"><i class="fa-solid fa-angle-right"></i> Kiểm tra lịch đặt phòng</a>
+                    </li>
                     <li><a href="admin.html" target="_blank"><i class="fa-solid fa-angle-right"></i> Trang Quản
                             Lý (Admin)</a></li>
                 </ul>
@@ -298,14 +331,14 @@
             <!-- Cột 3: Thông tin liên hệ -->
             <div class="footer-col">
                 <h4>Liên Hệ</h4>
-                <p><i class="fa-solid fa-location-dot"></i><a href="https://maps.app.goo.gl/G5sUv4R32t4eu8Tp8" target="_blank" 
-                        rel="noopener noreferrer" style="color: inherit;"
-                        >Địa chỉ: 56 Phan Văn Trị, Khu phố 6, Lagi, Lâm Đồng</a>
+                <p><i class="fa-solid fa-location-dot"></i><a href="https://maps.app.goo.gl/G5sUv4R32t4eu8Tp8"
+                        target="_blank" rel="noopener noreferrer" style="color: inherit;">Địa chỉ: 56 Phan Văn Trị, Khu
+                        phố 6, Lagi, Lâm Đồng</a>
                 </p>
 
                 <p><i class="fa-brands fa-facebook"></i>
-                    <a href="https://www.facebook.com/tunihousehomestaylagi" target="_blank" 
-                        rel="noopener noreferrer" style="color: inherit;">
+                    <a href="https://www.facebook.com/tunihousehomestaylagi" target="_blank" rel="noopener noreferrer"
+                        style="color: inherit;">
                         Facebook: Tuni's House - Homestay Lagi </a>
                 </p>
                 <p>

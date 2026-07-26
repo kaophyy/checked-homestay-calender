@@ -26,6 +26,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const closeQrBtn = document.getElementById('close-qr');
     const messengerWidget = document.getElementById('messenger-widget');
 
+    // Modal thông báo thành công Zalo
+    const zaloSuccessModal = document.getElementById('zalo-success-modal');
+    const closeZaloSuccessBtn = document.getElementById('close-zalo-success');
+
     // Selector nút chuyển tháng
     const prevMonthBtn = document.querySelector('.calendar-header button:first-child') || document.querySelector('.prev-month');
     const nextMonthBtn = document.querySelector('.calendar-header button:last-child') || document.querySelector('.next-month');
@@ -37,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let calendarCache = {}; // Lưu trữ tạm trạng thái từ Firebase
 
     const todayNow = new Date();
-    let currentMonth = todayNow.getMonth() + 1; // getMonth() trả về 0-11 nên cần +1
+    let currentMonth = todayNow.getMonth() + 1; // getMonth() trả về 0-11
     let currentYear = todayNow.getFullYear();
 
     // --- HÀM CẬP NHẬT GIAO DIỆN KHUNG THÔNG BÁO ---
@@ -89,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const data = doc.data();
             let status = data.status;
 
-            // TỰ ĐỘNG NHẢ PHÒNG: Nếu quá 60 phút chưa duyệt -> Chuyển về available
+            // TỰ ĐỘNG NHẢ PHÒNG: Quá 60 phút chưa duyệt -> Chuyển về available
             if (status === 'pending' && data.pending_until && data.pending_until < now) {
                 status = 'available';
                 db.collection("calendar").doc(dateId).set({ status: 'available' }, { merge: true });
@@ -108,35 +112,75 @@ document.addEventListener('DOMContentLoaded', function () {
 
         calendarCells.forEach(cell => {
             cell.onclick = function () {
-                // CHẶN NGAY: Nếu ngày này đã CÓ KHÁCH hoặc ĐANG CHỜ CỌC
-                if (this.classList.contains('booked') || this.classList.contains('pending')) {
-                    alert("Ngày này đã có khách đặt hoặc đang chờ xác nhận cọc, vui lòng chọn ngày khác!");
-                    return;
-                }
-
                 const dateStr = this.getAttribute('data-date');
                 if (!dateStr) return;
 
-                // Xử lý chọn mốc đầu / mốc cuối
-                if (startDate && endDate) {
+                // 1. Chặn chọn mốc đầu (startDate) rơi vào ngày đã booked/pending
+                if (!startDate || (startDate && endDate)) {
+                    if (this.classList.contains('booked') || this.classList.contains('pending')) {
+                        alert("Ngày này đã có khách đặt hoặc đang chờ xác nhận, vui lòng chọn ngày khác!");
+                        return;
+                    }
                     startDate = dateStr;
                     endDate = null;
-                } else if (!startDate) {
-                    startDate = dateStr;
                 } else {
-                    const d1 = new Date(startDate);
-                    const d2 = new Date(dateStr);
+                    // 2. Đã có startDate, tiến hành chọn endDate
+                    let d1 = new Date(startDate);
+                    let d2 = new Date(dateStr);
+
                     if (d2 < d1) {
-                        endDate = startDate;
+                        // Nếu chọn ngày kết thúc bé hơn ngày bắt đầu -> Đổi thành startDate mới
+                        if (this.classList.contains('booked') || this.classList.contains('pending')) {
+                            alert("Ngày này đã có khách đặt hoặc đang chờ xác nhận, vui lòng chọn ngày khác!");
+                            return;
+                        }
                         startDate = dateStr;
+                        endDate = null;
+                    } else if (d2.getTime() === d1.getTime()) {
+                        // Click lại đúng ngày bắt đầu -> Giữ nguyên chọn 1 ngày
+                        endDate = null;
                     } else {
-                        endDate = dateStr;
+                        // Đặt endDate
+                        let targetEndDate = dateStr;
+
+                        // Kiểm tra khoảng giữa startDate và endDate có dính ngày bận không
+                        if (checkRangeHasBlockedDays(startDate, targetEndDate)) {
+                            alert("Trong khoảng thời gian bạn chọn có ngày đã được khách khác giữ chỗ/đặt phòng. Vui lòng chọn khoảng ngày khác!");
+                            return;
+                        }
+
+                        endDate = targetEndDate;
                     }
                 }
 
                 highlightRange();
             };
         });
+    }
+
+    // Kiểm tra xem từ startStr đến trước endStr có chứa ngày bị khoá không
+    function checkRangeHasBlockedDays(startStr, endStr) {
+        let curr = new Date(startStr);
+        const endD = new Date(endStr);
+
+        curr.setHours(0, 0, 0, 0);
+        endD.setHours(0, 0, 0, 0);
+
+        // Kiểm tra các đêm lưu trú (từ startDate tới trước endDate)
+        while (curr < endD) {
+            const mStr = String(curr.getMonth() + 1).padStart(2, '0');
+            const dStr = String(curr.getDate()).padStart(2, '0');
+            const formattedDate = `${curr.getFullYear()}-${mStr}-${dStr}`;
+
+            const status = calendarCache[formattedDate];
+            if (status === 'booked' || status === 'pending') {
+                return true; // Có ngày bị vướng
+            }
+
+            curr.setDate(curr.getDate() + 1);
+        }
+
+        return false;
     }
 
     // --- C. HÀM TÔ MÀU VÀ ĐỒNG BỘ HIỂN THỊ LỊCH ---
@@ -180,7 +224,6 @@ document.addEventListener('DOMContentLoaded', function () {
             updateNoticeDisplay(startDate, null, 1);
 
         } else if (startDate && endDate) {
-            let hasBookedOrPending = false;
             const startD = new Date(startDate);
             const endD = new Date(endDate);
 
@@ -193,26 +236,19 @@ document.addEventListener('DOMContentLoaded', function () {
                     const cellD = new Date(cellDateStr);
                     cellD.setHours(0, 0, 0, 0);
 
-                    // Tô màu TẤT CẢ các ngày trong khoảng từ startDate đến endDate (bao gồm cả ngày 27)
+                    // Tô màu các ngày nằm trong khoảng chọn
                     if (cellD >= startD && cellD <= endD) {
                         cell.classList.add('selected-day');
                         selectedDates.push(cellDateStr);
                     }
-
-                    // Nhưng CHỈ KIỂM TRA TRÙNG LỊCH các đêm ở lại (< endD)
-                    if (cellD >= startD && cellD < endD) {
-                        if (cell.classList.contains('booked') || cell.classList.contains('pending')) {
-                            hasBookedOrPending = true;
-                        }
-                    }
                 }
             });
 
-            // Tính số đêm/ngày ở (VD: 26/07 -> 27/07 là 1 đêm)
+            // Tính số đêm lưu trú
             const timeDiff = Math.abs(endD - startD);
-            const totalDays = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)) || 1;
+            const totalNights = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)) || 1;
 
-            updateNoticeDisplay(startDate, endDate, totalDays, hasBookedOrPending);
+            updateNoticeDisplay(startDate, endDate, totalNights, false);
 
         } else {
             updateNoticeDisplay(null, null, 0);
@@ -233,7 +269,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            // Mở Modal cho khách điền thông tin
             if (qrModal) {
                 qrModal.classList.add('active');
                 qrModal.style.display = 'flex';
@@ -252,7 +287,6 @@ document.addEventListener('DOMContentLoaded', function () {
             const customerName = nameInput ? nameInput.value.trim() : '';
             const customerPhone = phoneInput ? phoneInput.value.trim() : '';
 
-            // Bắt buộc nhập tên & SĐT
             if (!customerName) {
                 alert("Vui lòng nhập Họ và tên của bạn!");
                 if (nameInput) nameInput.focus();
@@ -265,9 +299,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            // Kiểm tra xem khoảng ngày này có bị ai chốt cọc trước đó không
+            // Đảm bảo không lưu đè lên đêm trả phòng (chỉ lưu các đêm thực sự ở lại)
+            let datesToHold = [...selectedDates];
+            if (startDate && endDate && selectedDates.length > 1) {
+                datesToHold = selectedDates.filter(d => d !== endDate);
+            }
+
+            // Kiểm tra realtime lại một lần nữa trước khi ghi database
             let isBlocked = false;
-            for (let d of selectedDates) {
+            for (let d of datesToHold) {
                 const docSnap = await db.collection("calendar").doc(d).get();
                 if (docSnap.exists && docSnap.data().status === 'booked') {
                     isBlocked = true;
@@ -283,8 +323,8 @@ document.addEventListener('DOMContentLoaded', function () {
             const oneHourLater = Date.now() + (60 * 60 * 1000);
             const batch = db.batch();
 
-            // Lưu thông tin chờ xác nhận vào collection calendar
-            selectedDates.forEach(dateId => {
+            // Lưu trạng thái pending cho các đêm lưu trú
+            datesToHold.forEach(dateId => {
                 const docRef = db.collection("calendar").doc(dateId);
                 batch.set(docRef, {
                     status: 'pending',
@@ -303,7 +343,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 end_date: endDate || startDate,
                 customer_name: customerName,
                 customer_phone: customerPhone,
-                dates: selectedDates,
+                dates: datesToHold,
                 status: 'pending',
                 pending_until: oneHourLater,
                 created_at: Date.now()
@@ -311,18 +351,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
             await batch.commit();
 
-            alert("Gửi thông tin thành công! Đang chuyển hướng sang Zalo để trao đổi chi tiết...");
-
-            // Đóng Modal và tự động mở Zalo của Homestay
+            // 1. Đóng Modal điền thông tin
             if (qrModal) {
                 qrModal.classList.remove('active');
                 qrModal.style.display = 'none';
             }
-            window.open('https://zalo.me/0981081915', '_blank');
+
+            // 2. Mở Popup thông báo thành công
+            if (zaloSuccessModal) {
+                zaloSuccessModal.classList.add('active');
+                zaloSuccessModal.style.display = 'flex';
+            }
         });
     }
 
-    // --- F. ĐÓNG MODAL QR & FLOATING WIDGET ---
+    // --- F. ĐÓNG MODALS & FLOATING WIDGET ---
     if (closeQrBtn) {
         closeQrBtn.addEventListener('click', function () {
             if (qrModal) {
@@ -341,9 +384,27 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    if (closeZaloSuccessBtn) {
+        closeZaloSuccessBtn.addEventListener('click', function () {
+            if (zaloSuccessModal) {
+                zaloSuccessModal.classList.remove('active');
+                zaloSuccessModal.style.display = 'none';
+            }
+        });
+    }
+
+    if (zaloSuccessModal) {
+        zaloSuccessModal.addEventListener('click', function (e) {
+            if (e.target === zaloSuccessModal) {
+                zaloSuccessModal.classList.remove('active');
+                zaloSuccessModal.style.display = 'none';
+            }
+        });
+    }
+
     if (messengerWidget) {
         messengerWidget.addEventListener('click', function () {
-            window.open('https://zalo.me/0981081915', '_blank');
+            window.open('https://www.facebook.com/tunihousehomestaylagi', '_blank');
         });
     }
 
@@ -362,7 +423,7 @@ document.addEventListener('DOMContentLoaded', function () {
         grid.innerHTML = '';
         headers.forEach(h => grid.appendChild(h));
 
-        // Thêm các ô trống cho ngày thuộc tháng trước
+        // Thêm ô trống cho ngày thuộc tháng trước
         for (let i = 0; i < firstDay; i++) {
             const emptyCell = document.createElement('div');
             emptyCell.className = 'day-cell other-month';
@@ -372,7 +433,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
-        // Tạo các ô ngày với format chuẩn YYYY-MM-DD
+        // Tạo các ô ngày YYYY-MM-DD
         for (let day = 1; day <= daysInMonth; day++) {
             const cell = document.createElement('div');
             cell.className = 'day-cell';
@@ -384,7 +445,7 @@ document.addEventListener('DOMContentLoaded', function () {
             cell.setAttribute('data-date', fullDate);
             cell.innerText = day;
 
-            // Khóa các ngày trong quá khứ
+            // Khóa ngày trong quá khứ
             const cellDate = new Date(year, month - 1, day);
             cellDate.setHours(0, 0, 0, 0);
 
@@ -398,7 +459,6 @@ document.addEventListener('DOMContentLoaded', function () {
             grid.appendChild(cell);
         }
 
-        // Đồng bộ dữ liệu hiển thị từ Firebase & gán lại sự kiện click
         updateCalendarDisplay();
     }
 
@@ -417,6 +477,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Khởi tạo lịch mặc định ban đầu
+    // Khởi tạo lịch mặc định
     renderCalendar(currentMonth, currentYear);
 });
