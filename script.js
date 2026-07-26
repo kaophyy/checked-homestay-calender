@@ -11,20 +11,22 @@ const firebaseConfig = {
     measurementId: "G-8JVPYBPSG0"
 };
 
-firebase.initializeApp(firebaseConfig);
+// Khởi tạo Firebase & Firestore
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
 const db = firebase.firestore();
 
 // ==========================================
 // 2. XỬ LÝ LOGIC TRANG WEB
 // ==========================================
 document.addEventListener('DOMContentLoaded', function () {
-    const noticeText = document.getElementById('notice-text');
     const zaloBtn = document.getElementById('btn-zalo');
     const qrModal = document.getElementById('qr-modal');
     const closeQrBtn = document.getElementById('close-qr');
     const messengerWidget = document.getElementById('messenger-widget');
-    
-    // Cập nhật đúng class selector cho nút chuyển tháng (thay đổi theo cấu trúc nút trong HTML của bạn)
+
+    // Selector nút chuyển tháng
     const prevMonthBtn = document.querySelector('.calendar-header button:first-child') || document.querySelector('.prev-month');
     const nextMonthBtn = document.querySelector('.calendar-header button:last-child') || document.querySelector('.next-month');
     const titleHeader = document.getElementById('calendar-title');
@@ -34,8 +36,49 @@ document.addEventListener('DOMContentLoaded', function () {
     let selectedDates = []; // Danh sách các ngày được chọn
     let calendarCache = {}; // Lưu trữ tạm trạng thái từ Firebase
 
-    let currentMonth = 8;
-    let currentYear = 2026;
+    const todayNow = new Date();
+    let currentMonth = todayNow.getMonth() + 1; // getMonth() trả về 0-11 nên cần +1
+    let currentYear = todayNow.getFullYear();
+
+    // --- HÀM CẬP NHẬT GIAO DIỆN KHUNG THÔNG BÁO ---
+    function updateNoticeDisplay(start, end, totalDays, hasError = false) {
+        const defaultBox = document.getElementById('notice-default');
+        const selectedBox = document.getElementById('notice-selected');
+        const dateRangeEl = document.getElementById('display-date-range');
+        const totalDaysEl = document.getElementById('display-total-days');
+
+        if (!defaultBox || !selectedBox) return;
+
+        if (start && totalDays > 0) {
+            let rangeText = formatDateView(start);
+            if (end && end !== start) {
+                rangeText += ` ➔ ${formatDateView(end)}`;
+            }
+
+            if (dateRangeEl) dateRangeEl.innerText = rangeText;
+            if (totalDaysEl) totalDaysEl.innerText = totalDays;
+
+            defaultBox.style.display = 'none';
+            selectedBox.style.display = 'block';
+
+            if (hasError) {
+                selectedBox.classList.remove('notice-success');
+                selectedBox.classList.add('notice-warning');
+                selectedBox.style.backgroundColor = '#fef2f2';
+                selectedBox.style.borderColor = '#fecaca';
+                selectedBox.style.color = '#dc2626';
+            } else {
+                selectedBox.classList.remove('notice-warning');
+                selectedBox.classList.add('notice-success');
+                selectedBox.style.backgroundColor = '#f0fdf4';
+                selectedBox.style.borderColor = '#bbf7d0';
+                selectedBox.style.color = '#166534';
+            }
+        } else {
+            defaultBox.style.display = 'block';
+            selectedBox.style.display = 'none';
+        }
+    }
 
     // --- A. LẮNG NGHE DỮ LIỆU REALTIME TỪ FIRESTORE ---
     db.collection("calendar").onSnapshot((snapshot) => {
@@ -61,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // --- B. GÁN SỰ KIỆN CLICK CHO CÁC Ô LỊCH ---
     function attachCellClickEvents() {
-        const calendarCells = document.querySelectorAll('.calendar-grid .day-cell:not(.day-header):not(.other-month)');
+        const calendarCells = document.querySelectorAll('.calendar-grid .day-cell:not(.day-header):not(.other-month):not(.past-date)');
 
         calendarCells.forEach(cell => {
             cell.onclick = function () {
@@ -133,9 +176,9 @@ document.addEventListener('DOMContentLoaded', function () {
             if (cell) cell.classList.add('selected-day');
             selectedDates.push(startDate);
 
-            if (noticeText) {
-                noticeText.innerHTML = `<strong>Đã chọn ngày nhận phòng:</strong> ${formatDateView(startDate)}. Vui lòng nhấp chọn tiếp ngày trả phòng!`;
-            }
+            // Cập nhật khung thông báo với 1 ngày đã chọn
+            updateNoticeDisplay(startDate, null, 1);
+
         } else if (startDate && endDate) {
             let hasBookedOrPending = false;
             const startD = new Date(startDate);
@@ -145,7 +188,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const cellDateStr = cell.getAttribute('data-date');
                 if (cellDateStr) {
                     const cellD = new Date(cellDateStr);
-                    // CHỈ TÔ MÀU KHI NGÀY ĐÓ CHÍNH XÁC NẰM TRONG KHOẢNG NĂM-THÁNG-NGÀY
+                    // Chỉ tô màu khi nằm đúng trong khoảng ngày được chọn
                     if (cellD >= startD && cellD <= endD) {
                         cell.classList.add('selected-day');
                         selectedDates.push(cellDateStr);
@@ -157,13 +200,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
 
-            if (noticeText) {
-                if (hasBookedOrPending) {
-                    noticeText.innerHTML = `<strong style="color:red;">Lưu ý:</strong> Trong khoảng chọn có ngày đã được đặt/chờ xác nhận. Vui lòng chọn khoảng khác!`;
-                } else {
-                    noticeText.innerHTML = `<strong>Bạn đã chọn ở từ:</strong> <strong>${formatDateView(startDate)}</strong> đến <strong>${formatDateView(endDate)}</strong> (${selectedDates.length} ngày). Bấm nút bên dưới để giữ chỗ ngay!`;
-                }
+            // Cập nhật khung thông báo với dải ngày đã chọn
+            updateNoticeDisplay(startDate, endDate, selectedDates.length, hasBookedOrPending);
+
+            if (hasBookedOrPending) {
+                alert("Trong khoảng ngày bạn chọn có chứa ngày đã được đặt hoặc chờ xác nhận!");
             }
+        } else {
+            // Trường hợp chưa chọn ngày nào
+            updateNoticeDisplay(null, null, 0);
         }
     }
 
@@ -207,11 +252,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 }, { merge: true });
             });
 
-            const bookingId = `${startDate}_to_${endDate}`;
+            const bookingId = `${startDate}_to_${endDate || startDate}`;
             const bookingRef = db.collection("bookings").doc(bookingId);
             batch.set(bookingRef, {
                 start_date: startDate,
-                end_date: endDate,
+                end_date: endDate || startDate,
                 dates: selectedDates,
                 status: 'pending',
                 pending_until: oneHourLater,
@@ -256,35 +301,32 @@ document.addEventListener('DOMContentLoaded', function () {
     function renderCalendar(month, year) {
         if (titleHeader) titleHeader.innerText = `Tháng ${month}, ${year}`;
 
-        // Lấy ngày đầu tiên và số ngày của tháng
         const firstDay = new Date(year, month - 1, 1).getDay();
         const daysInMonth = new Date(year, month, 0).getDate();
 
         const grid = document.querySelector('.calendar-grid');
         if (!grid) return;
 
-        // Giữ lại các tiêu đề Thứ (Sun, Mon, Tue...)
+        // Giữ lại tiêu đề các Thứ (Sun, Mon, Tue...)
         const headers = Array.from(grid.querySelectorAll('.day-header'));
         grid.innerHTML = '';
         headers.forEach(h => grid.appendChild(h));
 
-        // Thêm ô trống cho các ngày thuộc tháng trước
+        // Thêm các ô trống cho ngày thuộc tháng trước
         for (let i = 0; i < firstDay; i++) {
             const emptyCell = document.createElement('div');
             emptyCell.className = 'day-cell other-month';
             grid.appendChild(emptyCell);
         }
 
-        // Lấy mốc thời gian hiện tại (đưa về 00:00:00 để so sánh chính xác theo ngày)
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
-        // Tạo các ô ngày trong tháng VỚI DATA-DATE CHUẨN (YYYY-MM-DD)
+        // Tạo các ô ngày với format chuẩn YYYY-MM-DD
         for (let day = 1; day <= daysInMonth; day++) {
             const cell = document.createElement('div');
             cell.className = 'day-cell';
 
-            // Format dạng YYYY-MM-DD chuẩn mực
             const mStr = String(month).padStart(2, '0');
             const dStr = String(day).padStart(2, '0');
             const fullDate = `${year}-${mStr}-${dStr}`;
@@ -292,25 +334,25 @@ document.addEventListener('DOMContentLoaded', function () {
             cell.setAttribute('data-date', fullDate);
             cell.innerText = day;
 
-            // --- ĐOẠN KIỂM TRA VÀ KHÓA CÁC NGÀY TRONG QUÁ KHỨ ---
+            // Khóa các ngày trong quá khứ
             const cellDate = new Date(year, month - 1, day);
             cellDate.setHours(0, 0, 0, 0);
 
             if (cellDate < today) {
                 cell.classList.add('past-date');
-                cell.style.opacity = '0.3';       // Làm mờ ngày cũ đi
-                cell.style.pointerEvents = 'none'; // Chặn hoàn toàn không cho click
+                cell.style.opacity = '0.3';
+                cell.style.pointerEvents = 'none';
                 cell.style.cursor = 'not-allowed';
             }
 
             grid.appendChild(cell);
         }
 
-        // Cập nhật lại màu sắc từ Firebase & gán sự kiện click
+        // Đồng bộ dữ liệu hiển thị từ Firebase & gán lại sự kiện click
         updateCalendarDisplay();
     }
 
-    // Sự kiện bấm nút Chuyển tháng
+    // Nút chuyển tháng
     if (prevMonthBtn) {
         prevMonthBtn.addEventListener('click', function () {
             if (currentMonth === 1) { currentMonth = 12; currentYear--; } else { currentMonth--; }
@@ -325,6 +367,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Khởi tạo lịch lần đầu tiên đúng theo Tháng 8/2026
+    // Khởi tạo lịch mặc định ban đầu
     renderCalendar(currentMonth, currentYear);
 });

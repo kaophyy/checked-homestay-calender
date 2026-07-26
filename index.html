@@ -154,12 +154,49 @@
                     <div class="day-cell" data-date="2026-08-31">31</div>
                 </div>
 
-                <!-- Warning Notice -->
+                <!-- Tutorial Notice -->
                 <div class="notice-box" id="notice-box">
-                    <i class="fa-solid fa-triangle-exclamation"></i>
-                    <div id="notice-text">
-                        <strong>Lưu ý:</strong> Nhấp vào ngày bạn muốn đặt phòng để kiểm tra trạng thái và liên hệ giữ
-                        chỗ ngay.
+                    <!-- TRẠNG THÁI 1: BAN ĐẦU (Mặc định) -->
+                    <div id="notice-default" class="notice-card notice-info">
+                        <div class="notice-item">
+                            <i class="fa-solid fa-circle-info"></i>
+                            <div>
+                                <strong>Hướng dẫn:</strong> Nhấp vào ngày bạn muốn đặt để kiểm tra trạng thái và giữ
+                                chỗ.
+                            </div>
+                        </div>
+                        <div class="notice-item warning">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                            <div>
+                                <strong>Lưu ý:</strong> Đơn <strong>Chờ xác nhận</strong> sẽ tự động hủy sau 60 phút nếu
+                                chưa hoàn tất cọc.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TRẠNG THÁI 2: ĐÃ CHỌN NGÀY (Nối JS vào đây) -->
+                    <div id="notice-selected" class="notice-card notice-success" style="display: none;">
+                        <div class="selected-row">
+                            <i class="fa-solid fa-calendar-check icon-main"></i>
+                            <div class="selected-info">
+                                <span class="label">Thời gian chọn:</span>
+                                <span id="display-date-range" class="val-date">--/--/----</span>
+                            </div>
+                            <div class="selected-badge">
+                                <span id="display-total-days">0</span> ngày
+                            </div>
+                        </div>
+
+                        <div class="selected-sub">
+                            <i class="fa-solid fa-clock"></i> Check-in: 14:00 | Check-out: 12:00
+                        </div>
+
+                        <!-- THÊM DÒNG NÀY ĐỂ HIỂN THỊ CẢNH BÁO 60 PHÚT -->
+                        <div class="selected-warning">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                            <span><strong>Lưu ý:</strong> Đơn <strong>Chờ xác nhận</strong> sẽ tự động hủy sau 60 phút
+                                nếu chưa hoàn tất cọc hoặc chưa liên hệ với Homestay.</span>
+                        </div>
                     </div>
                 </div>
 
@@ -222,7 +259,8 @@
                 <li><a href="#about"><i class="fa-solid fa-angle-right"></i> Về chúng tôi</a></li>
                 <li><a href="#amenities"><i class="fa-solid fa-angle-right"></i> Tiện nghi & Dịch vụ</a></li>
                 <li><a href="#calendar-section"><i class="fa-solid fa-angle-right"></i> Đặt lịch phòng</a></li>
-                <li><a href="admin.html" target="_blank"><i class="fa-solid fa-angle-right"></i> Trang Quản Lý(Admin)</a></li>
+                <li><a href="admin.html" target="_blank"><i class="fa-solid fa-angle-right"></i> Trang Quản
+                        Lý(Admin)</a></li>
             </ul>
         </div>
 
